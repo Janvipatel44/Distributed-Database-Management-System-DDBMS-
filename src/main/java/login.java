@@ -8,7 +8,7 @@ public class login {
     static String Password;
 
     public String verification(String userName, String password) {
-        Boolean flag = false;
+        boolean flag = false;
         String path = "login.txt";
 
         try {

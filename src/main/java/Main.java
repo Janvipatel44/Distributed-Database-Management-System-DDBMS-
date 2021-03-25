@@ -2,6 +2,8 @@
 //import datadictionarygenerator.DataDictionaryGenerator;
 //import erdgenerator.ERDGenerator;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -22,10 +24,10 @@ public class Main {
             System.out.println ("3. Generate ERD");
             System.out.println ("4. Generate data dictionary");
             String userInput = sc.nextLine ();
-//            switch (userInput) {
-//                case "1":
-//                    databaseSystem.init ();
-//                    break;
+            switch (userInput) {
+                case "1":
+                    databaseSystem.init ();
+                    break;
 //                case "2":
 //                    SQLDump dump = new SQLDump ();
 //                    System.out.println ("Enter database name");
@@ -44,11 +46,12 @@ public class Main {
 //                    String database2 = sc.nextLine ();
 //                    dataDictionaryGenerator.generate (username, database2);
 //                    break;
-//                default:
-//                    System.out.println ("Invalid input!");
+               default:
+                    System.out.println ("Invalid input!");
 //
-//            }
+            }
 
         }
     }
+
 }
