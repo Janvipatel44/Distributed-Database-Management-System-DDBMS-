@@ -28,6 +28,7 @@ public class QueryEngine {
     }
 
     private boolean checkDbSelected() {
+        database = "db";
         if (database == null) {
             System.out.println ("Please select a Database.");
             return false;

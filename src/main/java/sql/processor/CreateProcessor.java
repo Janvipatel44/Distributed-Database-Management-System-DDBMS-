@@ -11,12 +11,16 @@ import sql.sql.InternalQuery;
 import java.io.*;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class CreateProcessor implements IProcessor {
     static final Logger logger = LogManager.getLogger(CreateProcessor.class.getName());
     static final CrashListener crashListener = new CrashListener();
     static final DatabaseListener databaseListener = new DatabaseListener();
     static final QueryListener queryListener = new QueryListener();
+    private HashMap<String, String> primaryKey_Hashtable = new HashMap<String, String>();
+    private HashMap<String, String> foreignKey_Hashtable = new HashMap<String, String>();
+    private HashMap<String, HashMap<String,String>> datatable = new HashMap<String, HashMap<String,String>>(); // Create an ArrayList object
 
     String BASE_PATH = "src/main/java/dataFiles/";
     String DB_PATH = "src/main/java/dataFiles/databases.txt";
@@ -56,7 +60,7 @@ public class CreateProcessor implements IProcessor {
             System.out.println("DB created successfully");
             logger.info("DB "+name+" created successfully!");
             databaseListener.recordEvent();
-            parseDBFile(name);
+            //parseDBFile(name);
         }else{
             System.out.println("Sorry couldn’t create DB");
             crashListener.recordEvent();
@@ -65,22 +69,20 @@ public class CreateProcessor implements IProcessor {
     }
 
     private boolean createTable(InternalQuery internalQuery, String query, String username, String database) {
+        HashMap<String, String> columns_list = new HashMap<String, String>(); // Create an ArrayList object
+
         query = query.replaceAll(";", "");
         query = query.replaceAll(",", " ");
+        query = query.replaceAll("\\(", " ").replaceAll("\\)"," ");
         query = query.replaceAll("[^a-zA-Z ]", "");
+        query = query.replaceAll("  ", " ");
+
         String[] sqlWords = query.split(" ");
+
         int primaryIndex = sqlWords.length-1;
         int foreignIndex = 0;
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-//        JSONObject colObj = new JSONObject();
-//        JSONObject meta = new JSONObject();
-//        JSONObject indexes = new JSONObject();
-//        JSONArray  data = new JSONArray();
-
-      //  meta.put("rows", 0);
-        // meta.put("createdAt", timestamp.toString());
-
         if(query.toLowerCase().contains("primary key")) {
             for(int i = 0; i< sqlWords.length; i++) {
                 if(sqlWords[i].equalsIgnoreCase("primary")) {
@@ -89,9 +91,8 @@ public class CreateProcessor implements IProcessor {
                 }
             }
             String[] primaryKeys = Arrays.copyOfRange(sqlWords, primaryIndex, primaryIndex+3);
-//            JSONObject primaryJson = new JSONObject();
-//            primaryJson.put("type","primary");
-//            indexes.put(primaryKeys[2],primaryJson);
+            System.out.println(primaryKeys);
+            primaryKey_Hashtable.put("type","primary");
         }
         if(query.toLowerCase().contains("foreign key")) {
             for(int i = 0; i< sqlWords.length; i++) {
@@ -100,84 +101,35 @@ public class CreateProcessor implements IProcessor {
                     break;
                 }
             }
-//            String[] foreignKeys = Arrays.copyOfRange(sqlWords, foreignIndex, sqlWords.length);
-//            JSONObject foreignJson = new JSONObject();
-//            foreignJson.put("type","foreign");
-//            foreignJson.put("refTable",foreignKeys[4]);
-//            foreignJson.put("refColumn",foreignKeys[5]);
-//            indexes.put(foreignKeys[2],foreignJson);
+            String[] foreignKeys = Arrays.copyOfRange(sqlWords, foreignIndex, sqlWords.length);
+            foreignKey_Hashtable.put("type","foreign");
         }
-        sqlWords = Arrays.copyOfRange(sqlWords, 0, primaryIndex);
-        System.out.println(sqlWords);
+        //sqlWords = Arrays.copyOfRange(sqlWords, 0, primaryIndex);
 
-//        for(int i = 3; i< sqlWords.length; i+=2) {
-//            colObj.put(sqlWords[i], sqlWords[i+1]);
-//        }
-//        logger.info("Adding indexes to table!");
-//        logger.info("Adding columns to table!");
-//        String tableName = (String) internalQuery.get("name");
-//        JSONObject tableObj = new JSONObject();
-//
-//        tableObj.put("columns",colObj);
-//        tableObj.put("meta",meta);
-//        tableObj.put("indexes",indexes);
-//        tableObj.put("data",data);
-//
-//        try (FileWriter file = new FileWriter(BASE_PATH + database +"/"+tableName+".json")) {
-//            file.write(tableObj.toJSONString());
-//            file.flush();
-//            logger.info("Table "+tableName+" created successfully!");
-//            databaseListener.recordEvent();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            crashListener.recordEvent();
-//        }
-        return true;
-    }
+        for(int i = 3; i< sqlWords.length; i+=2) {
+            columns_list.put(sqlWords[i], sqlWords[i+1]);
+            System.out.println(columns_list);
+        }
+        logger.info("Adding indexes to table!");
+        String tableName = (String) internalQuery.get("name");
+        System.out.println("\n" +tableName);
+        System.out.println("Column List" +columns_list);
 
-    private void parseDBFile(String name) {
-        databaseExists = false;
-        //JSONParser parser = new JSONParser();
-//        try (FileReader reader = new FileReader(DB_PATH)) {
-            //Read JSON file
-//            Object obj = parser.parse(reader);
-
-//            JSONArray dblist = (JSONArray) obj;
-//            dblist.forEach(db -> {
-//                System.out.println(db);
-//                if(((JSONObject) db).get("name") == name) {
-//                    if (((JSONObject) db).get("username") == username) {
-//                        databaseExists = true;
-//                    }
-//                }
-//            });
-//            if(!databaseExists) {
-//                JSONObject dbObj = new JSONObject();
-//                dbObj.put("name", name);
-//                dbObj.put("username", username);
-//                dblist.add(dbObj);
-//                writeDBFile(dblist);
-//                databaseListener.recordEvent();
-//            }
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//            crashListener.recordEvent();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            crashListener.recordEvent();
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//            crashListener.recordEvent();
-//        }
-    }
-
-    private void writeDBFile() {
-        try (FileWriter file = new FileWriter(DB_PATH)) {
-            //file.write(dblist.toJSONString());
-            file.flush();
+        if(datatable!=null) {
+            System.out.println("Here we go");
+            datatable.put(tableName, columns_list);
+        }
+        String fileContent = tableName + "=" +datatable.get(tableName);
+        try (FileWriter file = new FileWriter(BASE_PATH + database +"/"+tableName+".txt")) {
+            file.write(fileContent);
+            logger.info("Table "+tableName+" created successfully!");
+            databaseListener.recordEvent();
         } catch (IOException e) {
             e.printStackTrace();
+            crashListener.recordEvent();
         }
+
+        return true;
     }
 
     @Override
