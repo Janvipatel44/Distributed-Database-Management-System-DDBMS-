@@ -1,6 +1,7 @@
 //import login.Login;
 import sql.sql.QueryEngine;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class DatabaseSystem {
@@ -25,7 +26,7 @@ public class DatabaseSystem {
         return user;
     }
 
-    public void init(){
+    public void init() throws IOException {
         while(true){
             System.out.println("Enter a SQL query to proceed or exit; to end!");
             String sqlQuery = sc.nextLine();

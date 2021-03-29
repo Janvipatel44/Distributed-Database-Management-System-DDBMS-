@@ -2,6 +2,7 @@
 //import datadictionarygenerator.DataDictionaryGenerator;
 //import erdgenerator.ERDGenerator;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -9,7 +10,7 @@ import java.util.Scanner;
 public class Main {
     private static Scanner sc;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         System.out.println("-----------------------------------------");
         System.out.println ("*** WELCOME TO DATABASE MANAGEMENT SYSTEM ***");
         System.out.println ("----------------------------------------");

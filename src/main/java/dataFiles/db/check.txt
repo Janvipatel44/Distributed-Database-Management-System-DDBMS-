@@ -1,0 +1,6 @@
+check={name=varchar, age=int}
+utkarsh,22
+janvi,22
+sarthak,22
+
+

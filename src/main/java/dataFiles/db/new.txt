@@ -1,1 +1,1 @@
-new={ID=int, primary=key}
+null2,
