@@ -1,0 +1,3 @@
+uu={ID=int}
+primary key 0=ID
+Foreign key 0=ID Reference To new(ID)

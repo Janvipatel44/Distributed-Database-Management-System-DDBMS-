@@ -11,8 +11,10 @@ import sql.sql.InternalQuery;
 
 import java.io.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class CreateProcessor implements IProcessor {
     static final Logger logger = LogManager.getLogger(CreateProcessor.class.getName());
@@ -80,33 +82,41 @@ public class CreateProcessor implements IProcessor {
 
         String[] sqlWords = query.split(" ");
 
-        int primaryIndex = sqlWords.length-1;
-        int foreignIndex = 0;
-
+        int primaryIndex = 1;
+        int foreignIndex = 1;
+        int foreignkeylocation = 0;
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         if(query.toLowerCase().contains("primary key")) {
             for(int i = 0; i< sqlWords.length; i++) {
                 if(sqlWords[i].equalsIgnoreCase("primary")) {
-                    primaryIndex = i;
-                    break;
+                    primaryKey_Hashtable.put("primary key "+ primaryIndex, sqlWords[i-2]);
+                    System.out.println(primaryKey_Hashtable);
+                    primaryIndex++;
+                    i++;
                 }
             }
-            String[] primaryKeys = Arrays.copyOfRange(sqlWords, primaryIndex, primaryIndex+3);
-            System.out.println(primaryKeys);
-            primaryKey_Hashtable.put("type","primary");
+            List<String> list = new ArrayList<String>(Arrays.asList(sqlWords));
+            list.remove("primary");
+            list.remove("key");
+            sqlWords = list.toArray(new String[0]);
         }
         if(query.toLowerCase().contains("foreign key")) {
             for(int i = 0; i< sqlWords.length; i++) {
                 if(sqlWords[i].equalsIgnoreCase("foreign")) {
-                    foreignIndex = i;
-                    break;
+                    if(foreignkeylocation==0)
+                        foreignkeylocation = i;
+                    String value = sqlWords[i+2] + " Reference To " + sqlWords[i+4] + "(" + sqlWords[i+5] + ")";
+                    foreignKey_Hashtable.put("foreign key "+ foreignIndex , value);
+                    System.out.println(foreignKey_Hashtable);
+                    foreignIndex++;
+                    i=i+5;
                 }
             }
-            String[] foreignKeys = Arrays.copyOfRange(sqlWords, foreignIndex, sqlWords.length);
-            foreignKey_Hashtable.put("type","foreign");
+            String[] foreignKeys = Arrays.copyOfRange(sqlWords, 0, foreignkeylocation);
+            sqlWords = foreignKeys;
         }
-        //sqlWords = Arrays.copyOfRange(sqlWords, 0, primaryIndex);
 
+        System.out.println(sqlWords);
         for(int i = 3; i< sqlWords.length; i+=2) {
             columns_list.put(sqlWords[i], sqlWords[i+1]);
             System.out.println(columns_list);
@@ -121,6 +131,26 @@ public class CreateProcessor implements IProcessor {
             datatable.put(tableName, columns_list);
         }
         String fileContent = tableName + "=" +datatable.get(tableName);
+
+        if(!primaryKey_Hashtable.isEmpty())
+        {
+            fileContent += "\n";
+            for (int i=0;i<primaryKey_Hashtable.size();i++)    {
+                String key = "primary key " + (i + 1);
+                System.out.println(key);
+                fileContent += key + "=" +primaryKey_Hashtable.get(key);
+            }
+        }
+
+        if(!foreignKey_Hashtable.isEmpty())
+        {
+            fileContent += "\n";
+            for (int i=0;i<foreignKey_Hashtable.size();i++)    {
+                String key = "foreign key " + (i + 1);
+                System.out.println(key);
+                fileContent += key + "=" +foreignKey_Hashtable.get(key);
+            }
+        }
         try (FileWriter file = new FileWriter(BASE_PATH + database +"/"+tableName+".txt")) {
             file.write(fileContent);
             logger.info("Table "+tableName+" created successfully!");
