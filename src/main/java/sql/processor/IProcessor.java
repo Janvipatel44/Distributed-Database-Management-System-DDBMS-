@@ -1,7 +1,8 @@
 package sql.processor;
 
+import dataFiles.db.databaseStructures;
 import sql.sql.InternalQuery;
 
 public interface IProcessor {
-    boolean process(InternalQuery query, String username, String database);
+    databaseStructures process(InternalQuery query, String username, String database,databaseStructures dbs);
 }

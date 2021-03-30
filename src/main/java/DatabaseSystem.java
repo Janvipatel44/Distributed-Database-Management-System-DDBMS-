@@ -1,4 +1,5 @@
 //import login.Login;
+import dataFiles.db.databaseStructures;
 import sql.sql.QueryEngine;
 
 import java.util.Scanner;
@@ -7,10 +8,14 @@ public class DatabaseSystem {
     private String user = null;
     private Scanner sc;
     private QueryEngine queryEngine;
+    public databaseStructures dbs;
 
-    public DatabaseSystem() {
+    public DatabaseSystem(databaseStructures dbsinject) {
         sc = new Scanner(System.in);
-        queryEngine = new QueryEngine();
+
+        this.dbs = dbsinject;
+
+        queryEngine = new QueryEngine(dbs);
     }
 
     public String authenticate(){
@@ -25,15 +30,17 @@ public class DatabaseSystem {
         return user;
     }
 
-    public void init(){
+    public databaseStructures init(databaseStructures dbsinject){
+        this.dbs = dbsinject;
         while(true){
             System.out.println("Enter a SQL query to proceed or exit; to end!");
             String sqlQuery = sc.nextLine();
             if(sqlQuery.equals("exit;")){
                 break;
             }
-            queryEngine.run(sqlQuery, user);
+            this.dbs = queryEngine.run(sqlQuery, user, this.dbs);
         }
         sc.close();
+        return this.dbs;
     }
 }

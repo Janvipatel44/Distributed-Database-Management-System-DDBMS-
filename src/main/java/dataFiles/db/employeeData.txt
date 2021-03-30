@@ -1,0 +1,2 @@
+employee = { id = "1" , name = "ram" } , { id = "2" , name = "harsh"}
+salary = { salaryamount  = "1000", id = "1" } , { salaryamount = "500" , id = "2"}

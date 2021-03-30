@@ -2,6 +2,8 @@
 //import datadictionarygenerator.DataDictionaryGenerator;
 //import erdgenerator.ERDGenerator;
 
+import dataFiles.db.databaseStructures;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -10,11 +12,14 @@ public class Main {
     private static Scanner sc;
 
     public static void main(String[] args) {
+
+        databaseStructures dbs = new databaseStructures();
+
         System.out.println("-----------------------------------------");
         System.out.println ("*** WELCOME TO DATABASE MANAGEMENT SYSTEM ***");
         System.out.println ("----------------------------------------");
 
-        DatabaseSystem databaseSystem = new DatabaseSystem ();
+        DatabaseSystem databaseSystem = new DatabaseSystem (dbs);
         sc = new Scanner (System.in);
         String username = databaseSystem.authenticate ();
         if (username != null) {
@@ -26,7 +31,7 @@ public class Main {
             String userInput = sc.nextLine ();
             switch (userInput) {
                 case "1":
-                    databaseSystem.init ();
+                    dbs = databaseSystem.init(dbs);
                     break;
 //                case "2":
 //                    SQLDump dump = new SQLDump ();
@@ -48,9 +53,7 @@ public class Main {
 //                    break;
                default:
                     System.out.println ("Invalid input!");
-//
             }
-
         }
     }
 

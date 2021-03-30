@@ -1,5 +1,6 @@
 package sql.processor;
 
+import dataFiles.db.databaseStructures;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -132,8 +133,7 @@ public class CreateProcessor implements IProcessor {
         return true;
     }
 
-    @Override
-    public boolean process(InternalQuery query, String username, String database) {
-        return false;
+    public databaseStructures process(InternalQuery query, String username, String database, databaseStructures dbs) {
+        return dbs;
     }
 }
