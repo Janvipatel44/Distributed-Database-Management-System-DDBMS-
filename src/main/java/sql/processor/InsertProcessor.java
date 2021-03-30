@@ -9,7 +9,7 @@ import sql.sql.InternalQuery;
 
 import java.io.*;
 
-public class InsertProcessor implements IProcessor {
+public class InsertProcessor {
     static final Logger logger = LogManager.getLogger(InsertProcessor.class.getName());
     static final CrashListener crashListener = new CrashListener();
     static final DatabaseListener databaseListener = new DatabaseListener();
@@ -28,7 +28,7 @@ public class InsertProcessor implements IProcessor {
         return instance;
     }
 
-    @Override
+    
     public boolean process(InternalQuery query, String username, String database) throws IOException {
         this.username = username;
         this.database = database;

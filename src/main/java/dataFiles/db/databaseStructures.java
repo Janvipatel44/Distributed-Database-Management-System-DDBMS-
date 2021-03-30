@@ -84,10 +84,10 @@ public class databaseStructures {
         e.printStackTrace();
 //        System.out.println("UnknownDatabase");
     }
-//        System.out.println("Selected DB "+ this.selectedDb);
-//        System.out.println("this is my structure hash map:"+this.tableStructure);
-//        System.out.println((tableStructure.get("employee")).get("id"));
-//        System.out.println("This is my Data Hashmap"+this.databasedata);
+        System.out.println("Selected DB "+ this.selectedDb);
+        System.out.println("this is my structure hash map:"+this.tableStructure);
+        System.out.println((tableStructure.get("employee")).get("id"));
+        System.out.println("This is my Data Hashmap"+this.databasedata);
         return this;
     }
 
