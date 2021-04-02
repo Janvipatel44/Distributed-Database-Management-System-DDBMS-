@@ -1,4 +1,4 @@
 databasename = employee
 
 tablename = employee = { id : int, Name : String }
-tablename = salary = { salaryamount : int, employeeid: int}
+tablename = salary = { salaryamount : int, employeeid : int }

@@ -85,21 +85,20 @@ public class databaseStructures {
         e.printStackTrace();
 //        System.out.println("UnknownDatabase");
     }
-        //System.out.println("Selected DB "+ this.selectedDb);
+        System.out.println("Selected DB "+ this.selectedDb);
         System.out.println("this is my structure hash map:"+this.tableStructure);
         System.out.println((tableStructure.get("employee")).get("id"));
         System.out.println("This is my Data Hashmap"+this.databasedata);
         return this;
     }
-    HashMap<String ,String> rowdata = new HashMap<>();
 
     public void storePermanatly(String DatabaseName){
 
 
 
         try {
-            File structurefile = new File("src/main/java/dataFiles/db/"+DatabaseName+"Structure.txt");
-            File structurefile2 = new File("src/main/java/dataFiles/db/"+DatabaseName+"Data.txt");
+            File structurefile = new File("src/main/java/dataFiles/db/"+DatabaseName+"StructureTest.txt");
+            File structurefile2 = new File("src/main/java/dataFiles/db/"+DatabaseName+"Datatest.txt");
             FileWriter fw = new FileWriter(structurefile, false);
             fw.close();
             FileWriter fr = new FileWriter(structurefile,true);
@@ -136,7 +135,5 @@ public class databaseStructures {
         }
 
     }
-
-
 
 }
