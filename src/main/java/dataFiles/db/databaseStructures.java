@@ -98,7 +98,7 @@ public class databaseStructures {
 
         try {
             File structurefile = new File("src/main/java/dataFiles/db/"+DatabaseName+"StructureTest.txt");
-            File structurefile2 = new File("src/main/java/dataFiles/db/"+DatabaseName+"Datatest.txt");
+            File structurefile2 = new File("src/main/java/dataFiles/db/"+DatabaseName+"Data.txt");
             FileWriter fw = new FileWriter(structurefile, false);
             fw.close();
             FileWriter fr = new FileWriter(structurefile,true);
@@ -115,21 +115,56 @@ public class databaseStructures {
                 tablename = key+" = { ";
                 String allColumns = "" ;
                 for(String key2 : tableStructure.get(key).keySet()){
-                    System.out.println(key2);
+                    //System.out.println(key2);
                     String columnName = key2+" : "+tableStructure.get(key).get(key2)+", ";
                     allColumns = allColumns + columnName;
                 }
                 StringBuffer sb = new StringBuffer(allColumns);
                 sb.deleteCharAt(sb.length()-2);
                 String enddelimiter = "}\n";
-                System.out.println(sb);
+                //System.out.println(sb);
                 tablename = tablename + sb + enddelimiter ;
-                System.out.println(tablename);
+                //System.out.println(tablename);
                 tableStruct = tableStruct + tablename;
                 fr.write(tableStruct);
-                System.out.println(tableStruct);
+                //System.out.println(tableStruct);
             }
             fr.close();
+            FileWriter fileWriter = new FileWriter(structurefile2,false);
+            fileWriter.close();
+            FileWriter fileWriter1 = new FileWriter(structurefile2,true);
+            for(String key : databasedata.keySet()){
+                String table = "";
+                table = key+" = { ";
+                String table_data = "";
+                String all_data = "";
+                for(String key2 : databasedata.get(key).keySet()){
+                    String column = "";
+                    String data = "";
+                    String final_data = "";
+
+                    for(String key3 : databasedata.get(key).get(key2).keySet()){
+                        column = key3+" = \"";
+                        data = column+databasedata.get(key).get(key2).get(key3)+"\" , ";
+                        final_data = final_data+data;
+
+                    }
+                    //System.out.println(final_data);
+                    StringBuffer sb = new StringBuffer(final_data);
+                    sb.deleteCharAt(sb.length()-2);
+                    String sb1 = sb+"";
+                    sb1 = sb1.trim();
+                all_data = all_data+sb1+" } , { ";
+                }
+                table_data = table+all_data;
+                table_data = table_data.substring(0,table_data.length()-5);
+                System.out.println(table_data);
+                fileWriter1.write(table_data);
+                fileWriter1.write("\n");
+            }
+            fileWriter1.close();
+
+
         }catch (Exception e){
             e.printStackTrace();
         }
