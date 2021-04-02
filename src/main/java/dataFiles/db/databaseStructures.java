@@ -3,6 +3,7 @@ package dataFiles.db;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,12 +85,13 @@ public class databaseStructures {
         e.printStackTrace();
 //        System.out.println("UnknownDatabase");
     }
-        System.out.println("Selected DB "+ this.selectedDb);
+        //System.out.println("Selected DB "+ this.selectedDb);
         System.out.println("this is my structure hash map:"+this.tableStructure);
         System.out.println((tableStructure.get("employee")).get("id"));
         System.out.println("This is my Data Hashmap"+this.databasedata);
         return this;
     }
+    HashMap<String ,String> rowdata = new HashMap<>();
 
     public void storePermanatly(){
 
