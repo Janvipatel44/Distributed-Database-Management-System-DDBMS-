@@ -92,9 +92,10 @@ public class databaseStructures {
         return this;
     }
 
-    public void storePermanatly(String DatabaseName){
+    public void storePermanatly(String DatabaseName)
+    {
 
-
+        System.out.println("Primary Key hashTable: " +primaryKey_Hashtable);
 
         try {
             File structurefile = new File("src/main/java/dataFiles/db/"+DatabaseName+"StructureTest.txt");
