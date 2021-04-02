@@ -36,6 +36,7 @@ public class DatabaseSystem {
             System.out.println("Enter a SQL query to proceed or exit; to end!");
             String sqlQuery = sc.nextLine();
             if(sqlQuery.equals("exit;")){
+                dbs.storePermanatly(dbs.selectedDb);
                 break;
             }
             this.dbs = queryEngine.run(sqlQuery, user, this.dbs);

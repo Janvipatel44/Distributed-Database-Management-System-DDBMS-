@@ -28,7 +28,7 @@ public class InsertProcessor {
         return instance;
     }
 
-    
+
     public boolean process(InternalQuery query, String username, String database) throws IOException {
         this.username = username;
         this.database = database;
