@@ -6,6 +6,12 @@ import sql.parser.UpdateParser;
 import sql.parser.UseParser;
 import sql.processor.CreateProcessor;
 import sql.processor.UpdateProcessor;
+import sql.parser.DeleteParser;
+import sql.parser.InsertParser;
+import sql.parser.UseParser;
+import sql.processor.CreateProcessor;
+import sql.processor.DeleteProcessor;
+import sql.processor.InsertProcessor;
 import sql.processor.UseProcessor;
 
 public class QueryEngine {
@@ -38,6 +44,22 @@ public class QueryEngine {
                     if (checkDbSelected ()) {
                         this.databaseStructures = CreateProcessor.instance ().process (internalQuery, username, this.database, this.databaseStructures);
                     }
+                }
+                break;
+            case "insert":
+                if (checkDbSelected ()) {
+                    internalQuery = InsertParser.instance ().parse (query);
+                    InsertProcessor insertProcessor = InsertProcessor.instance(databaseStructures);
+                    this.databaseStructures = insertProcessor.process(internalQuery, username, database, this.databaseStructures);
+                    this.database = insertProcessor.getDatabase();
+                }
+                break;
+            case "delete":
+                if (checkDbSelected ()) {
+                    internalQuery = DeleteParser.instance ().parse (query);
+                    DeleteProcessor deleteProcessor = DeleteProcessor.instance(databaseStructures);
+                    this.databaseStructures = deleteProcessor.process(internalQuery, username, database, this.databaseStructures);
+                    this.database = deleteProcessor.getDatabase();
                 }
                 break;
 
