@@ -93,8 +93,50 @@ public class databaseStructures {
     }
     HashMap<String ,String> rowdata = new HashMap<>();
 
-    public void storePermanatly(){
+    public void storePermanatly(String DatabaseName){
+
+
+
+        try {
+            File structurefile = new File("src/main/java/dataFiles/db/"+DatabaseName+"Structure.txt");
+            File structurefile2 = new File("src/main/java/dataFiles/db/"+DatabaseName+"Data.txt");
+            FileWriter fw = new FileWriter(structurefile, false);
+            fw.close();
+            FileWriter fr = new FileWriter(structurefile,true);
+
+            String dbString = "databasename = "+DatabaseName+"\n \n";
+            System.out.println("Datatatatatat"+dbString);
+            fr.write(dbString);
+
+
+            for(String key :  tableStructure.keySet()){
+                String tableStruct = "tablename = ";
+                String tablename = "";
+
+                tablename = key+" = { ";
+                String allColumns = "" ;
+                for(String key2 : tableStructure.get(key).keySet()){
+                    System.out.println(key2);
+                    String columnName = key2+" : "+tableStructure.get(key).get(key2)+", ";
+                    allColumns = allColumns + columnName;
+                }
+                StringBuffer sb = new StringBuffer(allColumns);
+                sb.deleteCharAt(sb.length()-2);
+                String enddelimiter = "}\n";
+                System.out.println(sb);
+                tablename = tablename + sb + enddelimiter ;
+                System.out.println(tablename);
+                tableStruct = tableStruct + tablename;
+                fr.write(tableStruct);
+                System.out.println(tableStruct);
+            }
+            fr.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
+
+
 
 }

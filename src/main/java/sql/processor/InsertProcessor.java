@@ -38,11 +38,11 @@ public class InsertProcessor implements IProcessor {
         for (int i = 0; i < columns.length; i++){
             rowdata.put(columns[i],values[i]);
         }
-        //System.out.println(rowdata);
+        System.out.println(rowdata);
         int hashmap_size = all_rows.size();
         int next_row_to_enter = hashmap_size + 1;
         all_rows.put("row"+next_row_to_enter,rowdata);
-        //System.out.println(all_rows);
+        System.out.println(all_rows);
         dbs.databasedata.put(table,all_rows);
 
         System.out.println(dbs.databasedata);
