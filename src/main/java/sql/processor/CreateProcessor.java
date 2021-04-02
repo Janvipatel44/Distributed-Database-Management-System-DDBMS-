@@ -23,7 +23,6 @@ public class CreateProcessor implements IProcessor {
     static final QueryListener queryListener = new QueryListener();
     private HashMap<String, String> primaryKey_Hashtable = new HashMap<String, String>();
     private HashMap<String, String> foreignKey_Hashtable = new HashMap<String, String>();
-    private HashMap<String, HashMap<String,String>> datatable = new HashMap<String, HashMap<String,String>>(); // Create an ArrayList object
 
     String BASE_PATH = "src/main/java/dataFiles/";
     String DB_PATH = "src/main/java/dataFiles/databases.txt";
@@ -40,21 +39,10 @@ public class CreateProcessor implements IProcessor {
         return instance;
     }
 
-    public boolean processCreateQuery(InternalQuery internalQuery, String query, String username, String database) {
-        this.username = username;
-        this.database = database;
-        logger.info("Checking if database exists!");
-        if(internalQuery.get("type").equals("database")){
-            return createDB(internalQuery);
-        }
-        else {
-            return createTable(internalQuery,query, username, database);
-        }
-    }
-
-    private boolean createDB(InternalQuery internalQuery) {
+  /*  private boolean createDB(InternalQuery internalQuery, String query, String username, databaseStructures dbs) {
         String name = (String) internalQuery.get("name");
-        String path = BASE_PATH + name ;
+        dbs.tableStructure.put("databaseName",name);
+        /*String path = BASE_PATH + name ;
         System.out.println(path);
         File file = new File(path);
         System.out.println(path);
@@ -67,12 +55,13 @@ public class CreateProcessor implements IProcessor {
         }else{
             System.out.println("Sorry couldn’t create DB");
             crashListener.recordEvent();
-        }
-        return true;
-    }
+        }*/
+      //  return true;
+    //}
 
-    private boolean createTable(InternalQuery internalQuery, String query, String username, String database) {
-        HashMap<String, String> columns_list = new HashMap<String, String>(); // Create an ArrayList object
+    private databaseStructures createTable(InternalQuery internalQuery, String query, String username, databaseStructures dbs)
+    {
+        HashMap<String,String> datatable = new HashMap<String,String>(); // Create an ArrayList object
 
         query = query.replaceAll(";", "");
         query = query.replaceAll(",", " ");
@@ -89,7 +78,7 @@ public class CreateProcessor implements IProcessor {
         if(query.toLowerCase().contains("primary key")) {
             for(int i = 0; i< sqlWords.length; i++) {
                 if(sqlWords[i].equalsIgnoreCase("primary")) {
-                    primaryKey_Hashtable.put("primary key "+ primaryIndex, sqlWords[i-2]);
+                    dbs.primaryKey_Hashtable.put("primary key "+ primaryIndex, sqlWords[i-2]);
                     System.out.println(primaryKey_Hashtable);
                     primaryIndex++;
                     i++;
@@ -106,7 +95,7 @@ public class CreateProcessor implements IProcessor {
                     if(foreignkeylocation==0)
                         foreignkeylocation = i;
                     String value = sqlWords[i+2] + " Reference To " + sqlWords[i+4] + "(" + sqlWords[i+5] + ")";
-                    foreignKey_Hashtable.put("foreign key "+ foreignIndex , value);
+                    dbs.foreignKey_Hashtable.put("foreign key "+ foreignIndex , value);
                     System.out.println(foreignKey_Hashtable);
                     foreignIndex++;
                     i=i+5;
@@ -118,19 +107,17 @@ public class CreateProcessor implements IProcessor {
 
         System.out.println(sqlWords);
         for(int i = 3; i< sqlWords.length; i+=2) {
-            columns_list.put(sqlWords[i], sqlWords[i+1]);
-            System.out.println(columns_list);
+            datatable.put(sqlWords[i], sqlWords[i+1]);
         }
         logger.info("Adding indexes to table!");
         String tableName = (String) internalQuery.get("name");
         System.out.println("\n" +tableName);
-        System.out.println("Column List" +columns_list);
+        System.out.println("Column List" +dbs.tableStructure);
 
         if(datatable!=null) {
-            System.out.println("Here we go");
-            datatable.put(tableName, columns_list);
+            dbs.tableStructure.put(tableName, datatable);
         }
-        String fileContent = tableName + "=" +datatable.get(tableName);
+    /*    String fileContent = tableName + "=" +datatable.get(tableName);
 
         if(!primaryKey_Hashtable.isEmpty())
         {
@@ -158,12 +145,21 @@ public class CreateProcessor implements IProcessor {
         } catch (IOException e) {
             e.printStackTrace();
             crashListener.recordEvent();
-        }
-
-        return true;
+        }*/
+        return dbs;
     }
 
-    public databaseStructures process(InternalQuery query, String username, String database, databaseStructures dbs) {
+    public databaseStructures process(InternalQuery internalQuery, String query, String database, databaseStructures dbs) {
+
+        this.username = username;
+        this.database = database;
+        logger.info("Checking if database exists!");
+        if(internalQuery.get("type").equals("database")){
+            //return createDB(internalQuery,query, database, dbs);
+        }
+        else {
+            return createTable(internalQuery,query, database, dbs);
+        }
         return dbs;
     }
 }

@@ -2,6 +2,10 @@ package sql.sql;
 
 import dataFiles.db.databaseStructures;
 import sql.parser.CreateParser;
+import sql.parser.UpdateParser;
+import sql.parser.UseParser;
+import sql.processor.CreateProcessor;
+import sql.processor.UpdateProcessor;
 import sql.parser.DeleteParser;
 import sql.parser.InsertParser;
 import sql.parser.UseParser;
@@ -35,10 +39,10 @@ public class QueryEngine {
             case "create":
                 internalQuery = CreateParser.instance ().parse (query);
                 if (((String) internalQuery.get ("type")).equalsIgnoreCase ("database")) {
-                    CreateProcessor.instance ().processCreateQuery (internalQuery, query, username, database);
+                    this.databaseStructures = CreateProcessor.instance ().process (internalQuery,username, this.database,this.databaseStructures);
                 } else {
                     if (checkDbSelected ()) {
-                        CreateProcessor.instance ().processCreateQuery (internalQuery, query, username, database);
+                        this.databaseStructures = CreateProcessor.instance ().process (internalQuery, username, this.database, this.databaseStructures);
                     }
                 }
                 break;
@@ -59,6 +63,14 @@ public class QueryEngine {
                 }
                 break;
 
+            case "update":
+                if (checkDbSelected ()) {
+                    internalQuery = UpdateParser.instance ().parse (query);
+                    if (internalQuery != null) {
+                        this.databaseStructures = UpdateProcessor.instance ().process (internalQuery, username, this.database,this.databaseStructures);
+                    }
+                }
+                break;
             default:
                 System.out.println ("invalid query!");
         }
