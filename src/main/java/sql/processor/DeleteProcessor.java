@@ -37,39 +37,43 @@ public class DeleteProcessor implements IProcessor {
         System.out.println(conditions[0]);
         System.out.println(conditions[1]);
         System.out.println(conditions[2]);
-        String to_delete = "";
+        String to_delete[] = new String[dbs.databasedata.get(table).size()];
+        int i = 0;
         for(String key : dbs.databasedata.get(table).keySet()){
             for(String key2 : dbs.databasedata.get(table).get(key).keySet()){
                 if(conditions[1].equals("=")){
                    if(key2.equals(conditions[0]) && dbs.databasedata.get(table).get(key).get(key2).equals(conditions[2])){
-                       to_delete = key;
+                       to_delete[i] = key;
                        System.out.println("deleted Entry");
                    }
                 }
                 if(conditions[1].equals("!=")){
                     if(key2.equals(conditions[0]) && !dbs.databasedata.get(table).get(key).get(key2).equals(conditions[2])){
-                        to_delete = key;
+                        to_delete[i] = key;
                         System.out.println("deleted Entry");
 
                     }
                 }
                 if(conditions[1].equals(">=")){
                     if(key2.equals(conditions[0]) && Integer.parseInt(dbs.databasedata.get(table).get(key).get(key2)) >= Integer.parseInt(conditions[2])){
-                        to_delete = key;
+                        to_delete[i] = key;
                         System.out.println("deleted Entry");
 
                     }
                 }
                 if(conditions[1].equals("<=")){
                     if(key2.equals(conditions[0]) && Integer.parseInt(dbs.databasedata.get(table).get(key).get(key2)) <= Integer.parseInt(conditions[2])){
-                        to_delete = key;
+                        to_delete[i] = key;
                         System.out.println("deleted Entry");
 
                     }
                 }
             }
+            i = i + 1;
         }
-        dbs.databasedata.get(table).remove(to_delete);
+        for(int j = 0; j < to_delete.length; j++) {
+            dbs.databasedata.get(table).remove(to_delete[j]);
+        }
         return dbs;
 
     }

@@ -1,2 +1,2 @@
 employee = { name = "ram" , id = "1" } , { name = "harsh" , id = "2" }
-salary = { salaryamount = "1000" , id = "1" } , { salaryamount = "500" , id = "2" } , { salaryamount = "4000" , id = "3" }
+salary = { salaryamount = "1000" , id = "1" }
