@@ -6,8 +6,6 @@ import sql.sql.InternalQuery;
 import dataFiles.db.databaseStructures;
 
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class DeleteProcessor implements IProcessor {
     static final Logger logger = LogManager.getLogger(InsertProcessor.class.getName());
@@ -34,10 +32,44 @@ public class DeleteProcessor implements IProcessor {
         String table = (String) query.get("table");
         table = table.trim();
         all_rows = dbs.databasedata.get(table);
-        Pattern pattern = Pattern.compile("\\s(.*?)\\s(.*?)\\s(.*?)?;");
-        Matcher matcher = pattern.matcher(condition);
-        boolean match = matcher.matches ();
+        String conditions[] = condition.split(" ");
 
+        System.out.println(conditions[0]);
+        System.out.println(conditions[1]);
+        System.out.println(conditions[2]);
+        String to_delete = "";
+        for(String key : dbs.databasedata.get(table).keySet()){
+            for(String key2 : dbs.databasedata.get(table).get(key).keySet()){
+                if(conditions[1].equals("=")){
+                   if(key2.equals(conditions[0]) && dbs.databasedata.get(table).get(key).get(key2).equals(conditions[2])){
+                       to_delete = key;
+                       System.out.println("deleted Entry");
+                   }
+                }
+                if(conditions[1].equals("!=")){
+                    if(key2.equals(conditions[0]) && !dbs.databasedata.get(table).get(key).get(key2).equals(conditions[2])){
+                        to_delete = key;
+                        System.out.println("deleted Entry");
+
+                    }
+                }
+                if(conditions[1].equals(">=")){
+                    if(key2.equals(conditions[0]) && Integer.parseInt(dbs.databasedata.get(table).get(key).get(key2)) >= Integer.parseInt(conditions[2])){
+                        to_delete = key;
+                        System.out.println("deleted Entry");
+
+                    }
+                }
+                if(conditions[1].equals("<=")){
+                    if(key2.equals(conditions[0]) && Integer.parseInt(dbs.databasedata.get(table).get(key).get(key2)) <= Integer.parseInt(conditions[2])){
+                        to_delete = key;
+                        System.out.println("deleted Entry");
+
+                    }
+                }
+            }
+        }
+        dbs.databasedata.get(table).remove(to_delete);
         return dbs;
 
     }
