@@ -28,7 +28,7 @@ public class InsertProcessor implements IProcessor {
     HashMap<String, HashMap<String, String>> first_entry;
 
     @Override
-    public databaseStructures process(InternalQuery query, String username, String database,databaseStructures dbs) {
+    public databaseStructures process(InternalQuery query,  String q, String username, String database,databaseStructures dbs) {
         first_entry = new HashMap<>();
         rowdata = new HashMap<>();
         this.username = username;

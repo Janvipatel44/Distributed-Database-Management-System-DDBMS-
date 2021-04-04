@@ -59,9 +59,13 @@ public class CreateProcessor implements IProcessor {
       //  return true;
     //}
 
-    private databaseStructures createTable(InternalQuery internalQuery, String query, String username, databaseStructures dbs)
+    private databaseStructures createTable(InternalQuery internalQuery, String query, String username, String database, databaseStructures dbs)
     {
         HashMap<String,String> datatable = new HashMap<String,String>(); // Create an ArrayList object
+
+        System.out.println(internalQuery.get("action"));
+        System.out.println(internalQuery.get("type"));
+        System.out.println(internalQuery.get("name"));
 
         query = query.replaceAll(";", "");
         query = query.replaceAll(",", " ");
@@ -70,6 +74,7 @@ public class CreateProcessor implements IProcessor {
         query = query.replaceAll("  ", " ");
 
         String[] sqlWords = query.split(" ");
+        System.out.println("Column List" +sqlWords);
 
         int primaryIndex = 1;
         int foreignIndex = 1;
@@ -79,7 +84,6 @@ public class CreateProcessor implements IProcessor {
             for(int i = 0; i< sqlWords.length; i++) {
                 if(sqlWords[i].equalsIgnoreCase("primary")) {
                     dbs.primaryKey_Hashtable.put("primary key "+ primaryIndex, sqlWords[i-2]);
-                    System.out.println(primaryKey_Hashtable);
                     primaryIndex++;
                     i++;
                 }
@@ -96,7 +100,6 @@ public class CreateProcessor implements IProcessor {
                         foreignkeylocation = i;
                     String value = sqlWords[i+2] + " Reference To " + sqlWords[i+4] + "(" + sqlWords[i+5] + ")";
                     dbs.foreignKey_Hashtable.put("foreign key "+ foreignIndex , value);
-                    System.out.println(foreignKey_Hashtable);
                     foreignIndex++;
                     i=i+5;
                 }
@@ -112,11 +115,14 @@ public class CreateProcessor implements IProcessor {
         logger.info("Adding indexes to table!");
         String tableName = (String) internalQuery.get("name");
         System.out.println("\n" +tableName);
-        System.out.println("Column List" +dbs.tableStructure);
 
         if(datatable!=null) {
             dbs.tableStructure.put(tableName, datatable);
         }
+        System.out.println("Column List" +dbs.tableStructure);
+        System.out.println("Primary Key" +dbs.primaryKey_Hashtable);
+        System.out.println("Foreign key" +dbs.foreignKey_Hashtable);
+
     /*    String fileContent = tableName + "=" +datatable.get(tableName);
 
         if(!primaryKey_Hashtable.isEmpty())
@@ -149,7 +155,7 @@ public class CreateProcessor implements IProcessor {
         return dbs;
     }
 
-    public databaseStructures process(InternalQuery internalQuery, String query, String database, databaseStructures dbs) {
+    public databaseStructures process(InternalQuery internalQuery, String query, String username, String database, databaseStructures dbs) {
 
         this.username = username;
         this.database = database;
@@ -158,7 +164,7 @@ public class CreateProcessor implements IProcessor {
             //return createDB(internalQuery,query, database, dbs);
         }
         else {
-            return createTable(internalQuery,query, database, dbs);
+            return createTable(internalQuery,query, username, database, dbs);
         }
         return dbs;
     }

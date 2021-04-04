@@ -24,17 +24,17 @@ public class QueryEngine {
             case "use":
                 internalQuery = UseParser.instance ().parse (query);
                 UseProcessor useProcessor = UseProcessor.instance(databaseStructures);
-                this.databaseStructures = useProcessor.process (internalQuery, username, database, this.databaseStructures);
+                this.databaseStructures = useProcessor.process (internalQuery, query, username, database, this.databaseStructures);
                 this.database = useProcessor.getDatabase ();
                 break;
 
             case "create":
                 internalQuery = CreateParser.instance ().parse (query);
                 if (((String) internalQuery.get ("type")).equalsIgnoreCase ("database")) {
-                    this.databaseStructures = CreateProcessor.instance ().process (internalQuery,username, this.database,this.databaseStructures);
+                    this.databaseStructures = CreateProcessor.instance ().process (internalQuery, query, username, this.database,this.databaseStructures);
                 } else {
                     if (checkDbSelected ()) {
-                        this.databaseStructures = CreateProcessor.instance ().process (internalQuery, username, this.database, this.databaseStructures);
+                        this.databaseStructures = CreateProcessor.instance ().process (internalQuery, query, username, this.database, this.databaseStructures);
                     }
                 }
                 break;
@@ -42,7 +42,7 @@ public class QueryEngine {
                 if (checkDbSelected ()) {
                     internalQuery = InsertParser.instance ().parse (query);
                     InsertProcessor insertProcessor = InsertProcessor.instance(databaseStructures);
-                    this.databaseStructures = insertProcessor.process(internalQuery, username, database, this.databaseStructures);
+                    this.databaseStructures = insertProcessor.process(internalQuery, query, username, database, this.databaseStructures);
                     this.database = insertProcessor.getDatabase();
                 }
                 break;
@@ -50,7 +50,7 @@ public class QueryEngine {
                 if (checkDbSelected ()) {
                     internalQuery = DeleteParser.instance ().parse (query);
                     DeleteProcessor deleteProcessor = DeleteProcessor.instance(databaseStructures);
-                    this.databaseStructures = deleteProcessor.process(internalQuery, username, database, this.databaseStructures);
+                    this.databaseStructures = deleteProcessor.process(internalQuery, query, username, database, this.databaseStructures);
                     this.database = deleteProcessor.getDatabase();
                 }
                 break;
@@ -59,7 +59,7 @@ public class QueryEngine {
                 if (checkDbSelected ()) {
                     internalQuery = UpdateParser.instance ().parse (query);
                     if (internalQuery != null) {
-                        this.databaseStructures = UpdateProcessor.instance ().process (internalQuery, username, this.database,this.databaseStructures);
+                        this.databaseStructures = UpdateProcessor.instance ().process (internalQuery, query, username, this.database,this.databaseStructures);
                     }
                 }
                 break;
@@ -67,7 +67,7 @@ public class QueryEngine {
                 if(checkDbSelected()) {
                     internalQuery = DropParser.instance().parse(query);
                     DropProcessor dropProcessor = DropProcessor.instance(databaseStructures);
-                    this.databaseStructures = dropProcessor.process(internalQuery, username, database, this.databaseStructures);
+                    this.databaseStructures = dropProcessor.process(internalQuery, query, username, database, this.databaseStructures);
                     this.database = dropProcessor.getDatabase();
                 }
                 break;

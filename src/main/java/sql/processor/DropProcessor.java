@@ -18,7 +18,7 @@ public class DropProcessor implements IProcessor{
 
     public String getDatabase(){return database;}
     @Override
-    public databaseStructures process(InternalQuery query, String username, String database, databaseStructures dbs) {
+    public databaseStructures process(InternalQuery query,  String q,String username, String database, databaseStructures dbs) {
         this.username = username;
         this.database = database;
 
