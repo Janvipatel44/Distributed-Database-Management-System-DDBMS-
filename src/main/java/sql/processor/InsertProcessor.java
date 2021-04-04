@@ -25,13 +25,20 @@ public class InsertProcessor implements IProcessor {
     public String getDatabase(){return database;}
     HashMap<String ,String> rowdata;
     HashMap<String, HashMap<String, String>> all_rows;
+    HashMap<String, HashMap<String, String>> first_entry;
+
     @Override
     public databaseStructures process(InternalQuery query, String username, String database,databaseStructures dbs) {
+        first_entry = new HashMap<>();
         rowdata = new HashMap<>();
         this.username = username;
         this.database = database;
         String table = (String) query.get("table");
         all_rows = dbs.databasedata.get(table);
+        int flag = 0;
+        if(all_rows == null){
+            flag = 1;
+        }
         System.out.println(all_rows);
         String[] columns = (String[]) query.get("columns");
         String[] values = (String[]) query.get("values");
@@ -39,12 +46,18 @@ public class InsertProcessor implements IProcessor {
             rowdata.put(columns[i],values[i]);
         }
         System.out.println(rowdata);
-        int hashmap_size = all_rows.size();
-        int next_row_to_enter = hashmap_size + 1;
-        all_rows.put("row"+next_row_to_enter,rowdata);
-        System.out.println(all_rows);
-        dbs.databasedata.put(table,all_rows);
-
+        int hashmap_size = 0;
+        if(flag == 1){
+            first_entry.put("row1",rowdata);
+            dbs.databasedata.put(table,first_entry);
+        }
+        else {
+            hashmap_size = all_rows.size();
+            int next_row_to_enter = hashmap_size + 1;
+            all_rows.put("row" + next_row_to_enter, rowdata);
+            System.out.println(all_rows);
+            dbs.databasedata.put(table, all_rows);
+        }
         System.out.println(dbs.databasedata);
 
         return dbs;

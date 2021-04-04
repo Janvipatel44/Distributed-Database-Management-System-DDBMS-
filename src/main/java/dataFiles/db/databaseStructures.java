@@ -98,7 +98,7 @@ public class databaseStructures {
         System.out.println("Primary Key hashTable: " +primaryKey_Hashtable);
 
         try {
-            File structurefile = new File("src/main/java/dataFiles/db/"+DatabaseName+"StructureTest.txt");
+            File structurefile = new File("src/main/java/dataFiles/db/"+DatabaseName+"Structure.txt");
             File structurefile2 = new File("src/main/java/dataFiles/db/"+DatabaseName+"Data.txt");
             FileWriter fw = new FileWriter(structurefile, false);
             fw.close();
