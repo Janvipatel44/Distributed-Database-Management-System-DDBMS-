@@ -1,18 +1,10 @@
 package sql.sql;
 
 import dataFiles.db.databaseStructures;
-import sql.parser.CreateParser;
-import sql.parser.UpdateParser;
+import sql.parser.*;
+import sql.processor.*;
 import sql.parser.UseParser;
 import sql.processor.CreateProcessor;
-import sql.processor.UpdateProcessor;
-import sql.parser.DeleteParser;
-import sql.parser.InsertParser;
-import sql.parser.UseParser;
-import sql.processor.CreateProcessor;
-import sql.processor.DeleteProcessor;
-import sql.processor.InsertProcessor;
-import sql.processor.UseProcessor;
 
 public class QueryEngine {
     private String database = null;
@@ -69,6 +61,14 @@ public class QueryEngine {
                     if (internalQuery != null) {
                         this.databaseStructures = UpdateProcessor.instance ().process (internalQuery, username, this.database,this.databaseStructures);
                     }
+                }
+                break;
+            case "drop":
+                if(checkDbSelected()) {
+                    internalQuery = DropParser.instance().parse(query);
+                    DropProcessor dropProcessor = DropProcessor.instance(databaseStructures);
+                    this.databaseStructures = dropProcessor.process(internalQuery, username, database, this.databaseStructures);
+                    this.database = dropProcessor.getDatabase();
                 }
                 break;
             default:

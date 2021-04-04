@@ -8,7 +8,6 @@ import dataFiles.db.databaseStructures;
 import java.util.HashMap;
 
 public class DeleteProcessor implements IProcessor {
-    static final Logger logger = LogManager.getLogger(InsertProcessor.class.getName());
 
     static DeleteProcessor instance = null;
 

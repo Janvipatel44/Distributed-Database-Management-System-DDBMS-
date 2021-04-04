@@ -1,2 +1,1 @@
 employee = { name = "ram" , id = "1" } , { name = "harsh" , id = "2" }
-salary = { salaryamount = "1000" , id = "1" }
