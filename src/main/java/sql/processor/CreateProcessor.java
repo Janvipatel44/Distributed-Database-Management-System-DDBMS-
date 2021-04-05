@@ -39,11 +39,22 @@ public class CreateProcessor implements IProcessor {
         return instance;
     }
 
-    private boolean createDB(InternalQuery internalQuery, String query, String username, String database, databaseStructures dbs) {
+    private databaseStructures createDB(InternalQuery internalQuery, String query, String username, String database, databaseStructures dbs)  {
         String name = (String) internalQuery.get("name");
+        System.out.println(name);
         if(!dbs.table_list.contains(name)) {
             dbs.table_list.add(name);
             System.out.println("DB created successfully");
+            try{
+                File structurefile = new File("src/main/java/dataFiles/db/"+name+"Data.txt");
+                File structurefile2 = new File("src/main/java/dataFiles/db/"+name+"Structure.txt");
+                structurefile.createNewFile();
+                structurefile2.createNewFile();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+
             logger.info("DB "+name+" created successfully!");
             databaseListener.recordEvent();
         }
@@ -51,7 +62,7 @@ public class CreateProcessor implements IProcessor {
             System.out.println("Sorry couldn’t create DB");
             crashListener.recordEvent();
         }
-        return true;
+        return dbs;
     }
 
     private databaseStructures createTable(InternalQuery internalQuery, String query, String username, String database, databaseStructures dbs)
@@ -88,16 +99,20 @@ public class CreateProcessor implements IProcessor {
             list.remove("key");
             sqlWords = list.toArray(new String[0]);
         }
+
+        System.out.println("Query" +query);
         if(query.toLowerCase().contains("foreign key")) {
             for(int i = 0; i< sqlWords.length; i++) {
-                if(sqlWords[i].equalsIgnoreCase("foreign")) {
+                if(sqlWords[i].equalsIgnoreCase("foreign"))
+                {
                     if(foreignkeylocation==0)
                         foreignkeylocation = i;
-                    if(dbs.table_list.contains(sqlWords[i+4]))
-                    {
+                    //if(dbs.table_list.contains(sqlWords[i+4]))
+                    //{
                         String value = sqlWords[i+2] + " Reference To " + sqlWords[i+4] + "(" + sqlWords[i+5] + ")";
+                        System.out.println("value:" +value);
                         dbs.foreignKey_Hashtable.put("foreign key " + foreignIndex, value);
-                    }
+                    //}
                     foreignIndex++;
                     i=i+5;
                 }
@@ -161,11 +176,10 @@ public class CreateProcessor implements IProcessor {
         this.database = database;
         logger.info("Checking if database exists!");
         if(internalQuery.get("type").equals("database")){
-            //return createDB(internalQuery,query, database, dbs);
+            return createDB(internalQuery, query, username, database, dbs);
         }
         else {
             return createTable(internalQuery,query, username, database, dbs);
         }
-        return dbs;
     }
 }
