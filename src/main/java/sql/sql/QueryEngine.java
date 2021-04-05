@@ -71,6 +71,12 @@ public class QueryEngine {
                     this.database = dropProcessor.getDatabase();
                 }
                 break;
+            case "select":
+                if (checkDbSelected ()) {
+                    internalQuery = SelectParser.instance ().parse (query);
+                    this.databaseStructures = SelectProcessor.instance ().process (internalQuery,query,username, database,this.databaseStructures);
+                }
+                break;
             default:
                 System.out.println ("invalid query!");
         }
