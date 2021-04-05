@@ -1,5 +1,24 @@
 Database = employee
 
+che {
+	name : varchar
+	id : int
+	type : varchar
+}
+stud {
+	name : varchar
+	id : int
+	age : int
+}
+sala {
+	id : int
+	salary : int
+	type : varchar
+}
+emp {
+	id : int
+	Name : String
+}
 students {
 	name : varchar
 	id : int

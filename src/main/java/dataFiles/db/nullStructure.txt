@@ -1,3 +1,0 @@
-databasename = null
- 
-tablename = newtb = { ID : int }

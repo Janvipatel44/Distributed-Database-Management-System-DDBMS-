@@ -1,9 +1,14 @@
 package dataFiles.db;
 
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.nio.channels.WritableByteChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +20,7 @@ public class databaseStructures {
 
     public String selectedDb = null;
 
-    public ArrayList<String> table_list = new ArrayList<String>();
+    public ArrayList<String> database_list = new ArrayList<String>();
     public HashMap<String,HashMap<String,HashMap<String,String>>> databasedata = new HashMap<>();
     public HashMap<String,HashMap<String ,String>> tableStructure = new HashMap<>();
 
@@ -26,6 +31,23 @@ public class databaseStructures {
 //        System.out.println(structurefile.getPath());
         FileReader fr = new FileReader(structurefile);
         BufferedReader br = new BufferedReader(fr);
+
+        String PROJECT_ID = "csci-5408-w21-305009";
+        //String PATH_TO_JSON_KEY = "/path/to/json/key";
+        String BUCKET_NAME = "csci5408_group-project";
+        String OBJECT_NAME = "employeeStructure.txt";
+
+        StorageOptions options = null;
+        options = StorageOptions.newBuilder()
+                .setProjectId(PROJECT_ID)
+                .build();
+
+        Storage storage = options.getService();
+        Blob blob = storage.get(BUCKET_NAME, OBJECT_NAME);
+        String fileContent = new String(blob.getContent());
+        String[] content = fileContent.split("\n");
+        System.out.println(fileContent);
+
         String line ;
         while((line=br.readLine())!=null){
             String[] splitted_part = line.split("=");
@@ -48,15 +70,52 @@ public class databaseStructures {
             }
         }
 
+        for(String line12 : content){
+            String[] splitted_part = line12.split("=");
+
+            if(splitted_part[0].trim().equals("tablename")){
+                String tablenametemp = splitted_part[1].trim();
+                HashMap<String,String> tempcolumnHashmap = new HashMap<>();;
+//                System.out.println(tablenametemp);
+                String[] tablemetadata = splitted_part[2].replaceAll("[{}]"," ").trim().split(",");
+                for (int j= 0; j<tablemetadata.length; j++){
+                    String[] columnattributes = tablemetadata[j].trim().split(":");
+
+                    tempcolumnHashmap.put(columnattributes[0].trim(),columnattributes[1].trim());
+//                    System.out.println(columnattributes[0]+"->"+columnattributes[1]);
+                }
+                this.tableStructure.put(tablenametemp,tempcolumnHashmap);
+//                System.out.println();
+            }else if(splitted_part[0].trim().equals("databasename")){
+
+            }
+        }
+        System.out.println(tableStructure);
+
         File structurefile2 = new File("src/main/java/dataFiles/db/"+DatabaseName+"Data.txt");
         FileReader fr2 = new FileReader(structurefile2);
         BufferedReader br2 = new BufferedReader(fr2);
         String line2 ;
 
+        String PROJECT_ID_1 = "csci-5408-w21-305009";
+        //String PATH_TO_JSON_KEY = "/path/to/json/key";
+        String BUCKET_NAME_1 = "csci5408_group-project";
+        String OBJECT_NAME_1 = "employeeData.txt";
+
+        StorageOptions options_1 = null;
+        options_1 = StorageOptions.newBuilder()
+                .setProjectId(PROJECT_ID_1)
+                .build();
+
+        Storage storage_1 = options_1.getService();
+        Blob blob_1 = storage_1.get(BUCKET_NAME_1, OBJECT_NAME_1);
+        String fileContent_1 = new String(blob_1.getContent());
+        String[] content_1 = fileContent_1.split("\n");
+        System.out.println(fileContent_1);
+
 
         HashMap<String,String> rowdata;
         HashMap<String,HashMap<String,String>> allrows;
-
 
         while((line2=br2.readLine())!=null){
             allrows = new HashMap<>();
@@ -83,6 +142,44 @@ public class databaseStructures {
             this.databasedata.put(tempTablename,allrows);
         }
 
+        for(String line22 : content_1){
+            allrows = new HashMap<>();
+            String[] spliting_line = line22.split("=",2);
+            String tempTablename = spliting_line[0].trim();
+            String[] spliting_data = spliting_line[1].split("} ,");
+            int rownum = 1;
+            for(int i=0;i<spliting_data.length;i++){
+
+                rowdata = new HashMap<String,String>();
+                String[] splitting_rows = spliting_data[i].replaceAll("[{}]","").trim().split(",");
+
+                String rowdetails = "row"+rownum;
+                for(int j=0;j<splitting_rows.length;j++)
+                {
+                    String[] splitting_columns = splitting_rows[j].trim().split("=");
+                    String column_name = splitting_columns[0].trim();
+                    String column_value = splitting_columns[1].replaceAll("\"","").trim();
+                    rowdata.put(column_name,column_value);
+                }
+                allrows.put(rowdetails,rowdata);
+                rownum=rownum+1;
+            }
+            this.databasedata.put(tempTablename,allrows);
+        }
+        System.out.println(databasedata);
+
+
+        File structurefile3 = new File("src/main/java/dataFiles/db/databases.txt");
+        FileReader fr3 = new FileReader(structurefile3);
+        BufferedReader br3 = new BufferedReader(fr3);
+        String line3 ;
+
+        while((line3=br3.readLine())!=null){
+            database_list.add(line3);
+        }
+
+        System.out.println("This is my db list"+database_list);
+
     }catch (Exception e){
         e.printStackTrace();
 //        System.out.println("UnknownDatabase");
@@ -98,11 +195,13 @@ public class databaseStructures {
     {
 
         System.out.println("Primary Key hashTable: " +primaryKey_Hashtable);
-        System.out.println("Table list: " +table_list);
+        System.out.println("Table list: " +database_list);
 
         try {
+            System.out.println(database_list);
             File structurefile = new File("src/main/java/dataFiles/db/"+DatabaseName+"Structure.txt");
             File structurefile2 = new File("src/main/java/dataFiles/db/"+DatabaseName+"Data.txt");
+
             FileWriter fw = new FileWriter(structurefile, false);
             fw.close();
             FileWriter fr = new FileWriter(structurefile,true);

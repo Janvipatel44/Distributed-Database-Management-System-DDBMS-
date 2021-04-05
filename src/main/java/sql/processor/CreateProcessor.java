@@ -42,8 +42,8 @@ public class CreateProcessor implements IProcessor {
     private databaseStructures createDB(InternalQuery internalQuery, String query, String username, String database, databaseStructures dbs)  {
         String name = (String) internalQuery.get("name");
         System.out.println(name);
-        if(!dbs.table_list.contains(name)) {
-            dbs.table_list.add(name);
+        if(!dbs.database_list.contains(name)) {
+            dbs.database_list.add(name);
             System.out.println("DB created successfully");
             try{
                 File structurefile = new File("src/main/java/dataFiles/db/"+name+"Data.txt");

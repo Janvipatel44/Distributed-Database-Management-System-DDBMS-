@@ -10,7 +10,7 @@ public class SQLDump {
 
     public void generateSQLDump(String username, String database, databaseStructures dbs) {
 
-        File dumpfile = new File("src/main/java/dataFiles/db/"+database+"DUMP.txt");
+        File dumpfile = new File("src/main/java/SQLDumps/"+database+"DUMP.txt");
 
         try {
             FileWriter fw = new FileWriter(dumpfile, false);
