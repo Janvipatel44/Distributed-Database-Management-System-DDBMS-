@@ -32,59 +32,95 @@ public class UpdateProcessor implements IProcessor
         int conditionFlag = 0;
 
         logger.info("Identifying requested columns");
-        String table = query.getTableName().trim();
-        String y = query.getOption().replaceAll("[^a-zA-Z=]", " ");
+        String table = query.getTableName().trim().replaceAll(",", "");
+        String y = query.getOption();
         String[] columnValue = y.split(" ");
+        for (int i=0;i<columnValue.length;i++) {
 
-        String x = query.getCondition().replaceAll("[^a-zA-Z1-9]", " ");
+            System.out.println(columnValue[i]);
+        }
+
+        String x = query.getCondition().trim().replaceAll(",", "");
         String[] conditions = x.split(" ");
+        for (int i=0;i<conditions.length;i++) {
 
+            System.out.println(conditions[i]);
+        }
         //Check if column names in the query is valid
-        String[] columnInTable = dbs.databasedata.get("db_table").get(1).keySet().toArray(new String[0]);
+       /* String[] columnInTable = dbs.databasedata.get("employee").get(1).keySet().toArray(new String[0]);
+        for (int i=0;i<columnInTable.length;i++) {
+            System.out.println("columnName" +columnInTable[i]);
+        }
         for (String column : columnInTable) {
-                if (column.equals(columnValue[0])) {
+                if (column.equals(columnValue[0]))
+                {
                     columnFlag = 1;
                 }
-                if (column.equals(conditions[0])) {
+                if (column.equals(conditions[0]))
+                {
                     conditionFlag = 1;
                 }
         }
-        logger.info("Identifying requested conditions");
+        logger.info("Identifying requested conditions");*/
 
 
-        if (columnFlag == 1 && conditionFlag == 1) {
+        //if (columnFlag == 1 && conditionFlag == 1) {
 
+        System.out.println(dbs.databasedata.get(table).get("row1").get(conditions[0]));
+        System.out.println("condition " +conditions[2]);
                 for (int j = 0; j < columnValue.length; j++) {
-                    for (int i = 0; i < dbs.databasedata.get("db_table").size(); i++) {
-                        if (conditions[1] == "=") {
-                            if (dbs.databasedata.get("db_table").get(i).get(conditions[0]) == conditions[2]) {
-                                dbs.databasedata.get("db_table").get(i).put(columnValue[j], columnValue[j + 1]);
+                    System.out.println("J" +j);
+
+                    for (int i = 0; i < conditions.length; i++) {
+
+                        System.out.println("I" +i);
+                        if (conditions[i].equals("=")) {
+                            for(int k=1;k<dbs.databasedata.get(table).size();k++) {
+                                if (dbs.databasedata.get(table).get("row"+k).get(conditions[i - 1]).equals(conditions[i + 1])) {
+                                    dbs.databasedata.get(table).get("row"+k).put(columnValue[j], columnValue[j + 2]);
+                                }
                             }
-                        } else if (conditions[1] == ">=") {
-                            if (Integer.parseInt((dbs.databasedata.get("db_table").get(i).get(conditions[0]))) >= Integer.parseInt(conditions[2])) {
-                                dbs.databasedata.get("db_table").get(i).put(columnValue[j], columnValue[j + 1]);
+                        } else if (conditions[1].equals(">") ) {
+                            if (Integer.parseInt((dbs.databasedata.get(table).get("row1").get(conditions[i-1]))) > Integer.parseInt(conditions[i+1])) {
+                                dbs.databasedata.get(table).get("row1").put(columnValue[j], columnValue[j + 2]);
                             }
-                        } else if (conditions[1] == "<=") {
-                            if (Integer.parseInt((dbs.databasedata.get("db_table").get(i).get(conditions[0]))) <= Integer.parseInt(conditions[2])) {
-                                dbs.databasedata.get("db_table").get(i).put(columnValue[j], columnValue[j + 1]);
+                        }
+                            else if (conditions[1].equals(">=") ) {
+                            if (Integer.parseInt((dbs.databasedata.get(table).get("row1").get(conditions[i-1]))) >= Integer.parseInt(conditions[i+1])) {
+                                dbs.databasedata.get(table).get("row1").put(columnValue[j], columnValue[j + 2]);
                             }
-                        } else if (conditions[1] == "!=") {
-                            if (Integer.parseInt((dbs.databasedata.get("db_table").get(i).get(conditions[0]))) != Integer.parseInt(conditions[2])) {
-                                dbs.databasedata.get("db_table").get(i).put(columnValue[j], columnValue[j + 1]);
+                        }
+                        else if (conditions[1].equals("<")) {
+                            if (Integer.parseInt((dbs.databasedata.get(table).get("row1").get(conditions[i-1]))) < Integer.parseInt(conditions[i+1])) {
+
+                                dbs.databasedata.get(table).get("row1").put(columnValue[j], columnValue[j + 2]);
+                            }
+                        }
+                            else if (conditions[1].equals("<=")) {
+                            if (Integer.parseInt((dbs.databasedata.get(table).get("row1").get(conditions[i-1]))) <= Integer.parseInt(conditions[i+1])) {
+
+                                dbs.databasedata.get(table).get("row1").put(columnValue[j], columnValue[j + 2]);
+                            }
+                        }
+                         else if (conditions[1].equals("!=")) {
+                            if (Integer.parseInt((dbs.databasedata.get(table).get("row1").get(conditions[i-1]))) != Integer.parseInt(conditions[i+1])) {
+
+                                dbs.databasedata.get(table).get("row1").put(columnValue[j], columnValue[j + 2]);
                             }
                         } else {
                             System.out.println("Check your conditions and try again !!");
-                            return null;
                         }
                     }
                 }
-                System.out.println("Update done successfully !!");
-            } else {
-                System.out.println("Invalid column name !!");
-                return null;
-        }
+                System.out.println("Update done successfully !!" +dbs.databasedata.get(table).get("row1"));
+                System.out.println("Update done successfully !!" +dbs.databasedata.get(table).get("row2"));
 
-        System.out.println("Sorry wrong condition !!");
+        //   } else {
+                System.out.println("Invalid column name !!");
+                //return null;
+        //}
+
+        //System.out.println("Sorry wrong condition !!");
         return dbs;
     }
 }

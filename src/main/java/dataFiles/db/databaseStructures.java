@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ public class databaseStructures {
 
     public String selectedDb = null;
 
+    public ArrayList<String> table_list = new ArrayList<String>();
     public HashMap<String,HashMap<String,HashMap<String,String>>> databasedata = new HashMap<>();
     public HashMap<String,HashMap<String ,String>> tableStructure = new HashMap<>();
 
@@ -96,6 +98,7 @@ public class databaseStructures {
     {
 
         System.out.println("Primary Key hashTable: " +primaryKey_Hashtable);
+        System.out.println("Table list: " +table_list);
 
         try {
             File structurefile = new File("src/main/java/dataFiles/db/"+DatabaseName+"Structure.txt");

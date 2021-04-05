@@ -39,25 +39,20 @@ public class CreateProcessor implements IProcessor {
         return instance;
     }
 
-  /*  private boolean createDB(InternalQuery internalQuery, String query, String username, databaseStructures dbs) {
+    private boolean createDB(InternalQuery internalQuery, String query, String username, String database, databaseStructures dbs) {
         String name = (String) internalQuery.get("name");
-        dbs.tableStructure.put("databaseName",name);
-        /*String path = BASE_PATH + name ;
-        System.out.println(path);
-        File file = new File(path);
-        System.out.println(path);
-        boolean bool = file.mkdir();
-        if(bool){
+        if(!dbs.table_list.contains(name)) {
+            dbs.table_list.add(name);
             System.out.println("DB created successfully");
             logger.info("DB "+name+" created successfully!");
             databaseListener.recordEvent();
-            //parseDBFile(name);
-        }else{
+        }
+        else{
             System.out.println("Sorry couldn’t create DB");
             crashListener.recordEvent();
-        }*/
-      //  return true;
-    //}
+        }
+        return true;
+    }
 
     private databaseStructures createTable(InternalQuery internalQuery, String query, String username, String database, databaseStructures dbs)
     {
@@ -98,8 +93,11 @@ public class CreateProcessor implements IProcessor {
                 if(sqlWords[i].equalsIgnoreCase("foreign")) {
                     if(foreignkeylocation==0)
                         foreignkeylocation = i;
-                    String value = sqlWords[i+2] + " Reference To " + sqlWords[i+4] + "(" + sqlWords[i+5] + ")";
-                    dbs.foreignKey_Hashtable.put("foreign key "+ foreignIndex , value);
+                    if(dbs.table_list.contains(sqlWords[i+4]))
+                    {
+                        String value = sqlWords[i+2] + " Reference To " + sqlWords[i+4] + "(" + sqlWords[i+5] + ")";
+                        dbs.foreignKey_Hashtable.put("foreign key " + foreignIndex, value);
+                    }
                     foreignIndex++;
                     i=i+5;
                 }
@@ -108,10 +106,12 @@ public class CreateProcessor implements IProcessor {
             sqlWords = foreignKeys;
         }
 
-        System.out.println(sqlWords);
+        System.out.println("foreign key:" +dbs.foreignKey_Hashtable);
         for(int i = 3; i< sqlWords.length; i+=2) {
             datatable.put(sqlWords[i], sqlWords[i+1]);
         }
+        System.out.println("\n data table" +datatable);
+
         logger.info("Adding indexes to table!");
         String tableName = (String) internalQuery.get("name");
         System.out.println("\n" +tableName);
