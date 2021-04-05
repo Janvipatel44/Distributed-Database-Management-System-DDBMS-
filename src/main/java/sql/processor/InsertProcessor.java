@@ -5,7 +5,9 @@ import org.apache.logging.log4j.Logger;
 import sql.sql.InternalQuery;
 import dataFiles.db.databaseStructures;
 
+import javax.jws.WebService;
 import java.util.HashMap;
+//@WebService(endpointInterface = "sql.processor.InsertProcessor")
 
 public class InsertProcessor implements IProcessor {
     static final Logger logger = LogManager.getLogger(InsertProcessor.class.getName());

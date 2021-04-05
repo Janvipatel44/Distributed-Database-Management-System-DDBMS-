@@ -1,0 +1,21 @@
+Database = employee
+
+students {
+	name : varchar
+	id : int
+	age : int
+}
+check {
+	name : varchar
+	id : int
+	type : varchar
+}
+employee {
+	id : int
+	Name : String
+}
+salary {
+	id : int
+	salary : int
+	type : varchar
+}

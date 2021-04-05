@@ -1,2 +1,4 @@
-students = { name = "utkarsh" , id = "1" , age = "22" } , { name = "utkarsh" , id = "2" , age = "22" }
-employee = { name = "ram" , id = "1" } , { name = "harsh" , id = "2" }
+students = { name = "utkarsh" , id = "1" , age = "22" }
+check = { name = "utkarsh" , id = "1" , type = "student" } , { name = "sarthak" , id = "2" , type = "faculty" }
+employee = { name = "ram" , id = "1" }
+salary = { id = "1" , salary = "2000" , type = "cash" } , { id = "2" , salary = "20000" , type = "cheque" }
