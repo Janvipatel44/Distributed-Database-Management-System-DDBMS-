@@ -4,6 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sql.sql.InternalQuery;
 import dataFiles.db.databaseStructures;
+
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -40,6 +42,58 @@ public class InsertProcessor implements IProcessor {
         this.database = database;
         String table = (String) query.get("table");
         String primaryKey = null;
+        String foreignkeyValue = null;
+        String[] foreignKeytable = new String[2];
+        String[] foreignKeyReferencetable = new String[2];
+        String[] columns = (String[]) query.get("columns");
+        String[] values = (String[]) query.get("values");
+        int temp = 0;
+        //Foreign key 3 = emp(id) Reference To sal(id)
+        if (dbs.foreignKey_Hashtable.keySet() != null)
+        {
+            for(String key : dbs.foreignKey_Hashtable.keySet())
+            {
+                foreignkeyValue = dbs.foreignKey_Hashtable.get(key);
+                String[] foreignKey = foreignkeyValue.split(" ");
+                foreignKeytable = foreignKey[0].split("\\(");
+                foreignKeytable[1] = foreignKeytable[1].substring(0,foreignKeytable[1].length()-1);
+
+                foreignKeyReferencetable = foreignKey[3].split("\\(");
+                foreignKeyReferencetable[1] = foreignKeyReferencetable[1].substring(0,foreignKeyReferencetable[1].length()-1);
+
+                if(foreignKeytable[0].equals(table))
+                {
+                    for(String row : dbs.databasedata.get(foreignKeyReferencetable[0]).keySet()) {
+                        System.out.println("row" +row);
+
+                        for(String col : dbs.databasedata.get(foreignKeyReferencetable[0]).get(row).keySet())
+                        {
+                            System.out.println("col" +col);
+
+                            if(col.equals(foreignKeyReferencetable[1])) {
+
+                                for(int i=0; i<values.length;i++) {
+                                    System.out.println("columns:" +columns[i]);
+                                    System.out.println("value" +values[i]);
+
+                                    if (dbs.databasedata.get(foreignKeyReferencetable[0]).get(row).get(col).equals(values[i])) {
+                                        System.out.println("Here");
+
+                                        temp = 1;
+                                    }
+
+                                }
+                            }
+
+                        }
+                    }
+                }
+                System.out.println("FLLLLLLLLLLLLLLAGGGGGGGGGGGGGG" +temp);
+
+            }
+        }
+
+
 
         if (dbs.primaryKey_Hashtable.containsKey(table)) {
             primaryKey = dbs.primaryKey_Hashtable.get(table);
@@ -65,15 +119,19 @@ public class InsertProcessor implements IProcessor {
             flag = 1;
         }
         System.out.println(all_rows);
-        String[] columns = (String[]) query.get("columns");
-        String[] values = (String[]) query.get("values");
+
         for (int i = 0; i < columns.length; i++) {
             if (columns[i].equals(primaryKey) && uniqueItem.contains(values[i])) {
                 rowdata.clear();
                 System.out.println("Can't insert due to primary key contraints");
                 break;
             }
-            rowdata.put(columns[i], values[i]);
+            if(temp==1) {
+                rowdata.put(columns[i], values[i]);
+            }
+            else{
+                System.out.println("foreign key contraints failed");
+            }
         }
 
         System.out.println(rowdata);
