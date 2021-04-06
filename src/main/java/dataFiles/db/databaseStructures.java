@@ -21,6 +21,8 @@ public class databaseStructures {
     public HashMap <String,String> foreignKey_Hashtable = new HashMap<>();
     public String[] in_remote;
     public String[] in_local;
+    public List<String> inlocal = new ArrayList<>();
+    public List<String> inremote = new ArrayList<>();
 
     public String selectedDb = null;
 
@@ -111,6 +113,7 @@ public class databaseStructures {
 
                     String tablenametemp = splitted_part[1].trim();
                     in_local[x] = tablenametemp;
+                    inlocal.add(tablenametemp);
                     x++;
                 }
             }
@@ -119,6 +122,7 @@ public class databaseStructures {
                 if(splitted_part[0].trim().equals("tablename")){
                     String tablenametemp = splitted_part[1].trim();
                     in_remote[y] = tablenametemp;
+                    inremote.add(tablenametemp);
                     y++;
                 }
             }
@@ -231,8 +235,10 @@ public class databaseStructures {
 
     public void storePermanatly(String DatabaseName)
     {
-        List<String> inlocal = Arrays.asList(in_local);
-        List<String> inremote = Arrays.asList(in_remote);
+        // inlocal = Arrays.asList(in_local);
+        // inremote = Arrays.asList(in_remote);
+
+
 
         //System.out.println("Primary Key hashTable: " +primaryKey_Hashtable);
         //System.out.println("Table list: " +database_list);
@@ -268,7 +274,9 @@ public class databaseStructures {
 
             String to_write = "";
             String final_output = "";
+            System.out.println("INNNNNNNNNNNN" +inlocal);
             for(String key :  tableStructure.keySet()){
+
                 if(inlocal.contains(key)){
                 String tableStruct = "tablename = ";
                 String tablename = "";

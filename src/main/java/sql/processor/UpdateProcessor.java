@@ -75,17 +75,18 @@ public class UpdateProcessor implements IProcessor
 
                         System.out.println("I" +i);
                         if (conditions[i].equals("=")) {
-                            for(int k=1;k<dbs.databasedata.get(table).size();k++) {
-                                if (dbs.databasedata.get(table).get("row"+k).get(conditions[i - 1]).equals(conditions[i + 1])) {
-                                    dbs.databasedata.get(table).get("row"+k).put(columnValue[j], columnValue[j + 2]);
+                            //for(int k=1;k<dbs.databasedata.get(table).size();k++) {
+                                if (dbs.databasedata.get(table).get("row1").get(conditions[i - 1]).equals(conditions[i + 1])) {
+                                    dbs.databasedata.get(table).get("row1").put(columnValue[j], columnValue[j + 2]);
                                 }
-                            }
-                        } else if (conditions[1].equals(">") ) {
+                            //}
+                        }
+                        else if (conditions[1].equals(">") ) {
                             if (Integer.parseInt((dbs.databasedata.get(table).get("row1").get(conditions[i-1]))) > Integer.parseInt(conditions[i+1])) {
                                 dbs.databasedata.get(table).get("row1").put(columnValue[j], columnValue[j + 2]);
                             }
                         }
-                            else if (conditions[1].equals(">=") ) {
+                        else if (conditions[1].equals(">=") ) {
                             if (Integer.parseInt((dbs.databasedata.get(table).get("row1").get(conditions[i-1]))) >= Integer.parseInt(conditions[i+1])) {
                                 dbs.databasedata.get(table).get("row1").put(columnValue[j], columnValue[j + 2]);
                             }
@@ -96,18 +97,19 @@ public class UpdateProcessor implements IProcessor
                                 dbs.databasedata.get(table).get("row1").put(columnValue[j], columnValue[j + 2]);
                             }
                         }
-                            else if (conditions[1].equals("<=")) {
+                        else if (conditions[1].equals("<=")) {
                             if (Integer.parseInt((dbs.databasedata.get(table).get("row1").get(conditions[i-1]))) <= Integer.parseInt(conditions[i+1])) {
 
                                 dbs.databasedata.get(table).get("row1").put(columnValue[j], columnValue[j + 2]);
                             }
                         }
-                         else if (conditions[1].equals("!=")) {
+                        else if (conditions[1].equals("!=")) {
                             if (Integer.parseInt((dbs.databasedata.get(table).get("row1").get(conditions[i-1]))) != Integer.parseInt(conditions[i+1])) {
 
                                 dbs.databasedata.get(table).get("row1").put(columnValue[j], columnValue[j + 2]);
                             }
-                        } else {
+                        }
+                        else {
                             System.out.println("Check your conditions and try again !!");
                         }
                     }

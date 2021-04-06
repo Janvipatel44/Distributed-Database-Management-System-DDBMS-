@@ -22,11 +22,13 @@ public class CreateParser implements IParser {
         String action = sqlWords[0];
         String type = sqlWords[1];
         String name = sqlWords[2];
+        String location = sqlWords[3];
 
         InternalQuery internalQuery = new InternalQuery();
         internalQuery.set("action", action);
         internalQuery.set("type", type);
         internalQuery.set("name", name);
+        internalQuery.set("location", location);
 
         return internalQuery;
     }

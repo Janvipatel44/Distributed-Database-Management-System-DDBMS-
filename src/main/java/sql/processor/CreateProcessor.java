@@ -68,11 +68,24 @@ public class CreateProcessor implements IProcessor {
     private databaseStructures createTable(InternalQuery internalQuery, String query, String username, String database, databaseStructures dbs)
     {
         HashMap<String,String> datatable = new HashMap<String,String>(); // Create an ArrayList object
+        //System.out.println(internalQuery.get("name"));
+        String name = (String) internalQuery.get("name");
+        System.out.println(name);
+
+        String location = (String) internalQuery.get("location");
+        System.out.println();
+        if(location.equals("local")){
+            dbs.inlocal.add(name);
+        }
+
+        else if(location.contains("remote")){
+            dbs.inremote.add(name);
+        }
+        System.out.println(dbs.inlocal);
 
         System.out.println(internalQuery.get("action"));
         System.out.println(internalQuery.get("type"));
         System.out.println(internalQuery.get("name"));
-
         query = query.replaceAll(";", "");
         query = query.replaceAll(",", " ");
         query = query.replaceAll("\\(", " ").replaceAll("\\)"," ");
@@ -122,7 +135,7 @@ public class CreateProcessor implements IProcessor {
         }
 
         System.out.println("foreign key:" +dbs.foreignKey_Hashtable);
-        for(int i = 3; i< sqlWords.length; i+=2) {
+        for(int i = 4; i< sqlWords.length; i+=2) {
             datatable.put(sqlWords[i], sqlWords[i+1]);
         }
         System.out.println("\n data table" +datatable);
