@@ -6,13 +6,11 @@ import com.google.cloud.storage.StorageOptions;
 import com.google.common.base.Utf8;
 import sun.nio.cs.UTF_32;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.*;
 
 public class databaseStructures {
@@ -219,9 +217,31 @@ public class databaseStructures {
             database_list.add(line3);
         }
 
-        //System.out.println("This is my db list"+database_list);
+        File keyFile = new File("src/main/java/dataFiles/db/"+DatabaseName+"Keys.txt");
+        FileReader fileReaderkey = new FileReader(keyFile);
+        bufferedReader = new BufferedReader(fileReaderkey);
 
-    }catch (Exception e){
+        while((line=bufferedReader.readLine())!=null) {
+            String[] splitted_part = line.split("=");
+            for (String s: splitted_part){
+                System.out.println("\n " +s);
+            }
+            if(splitted_part[0].contains("Primary Key"))
+            {
+                this.primaryKey_Hashtable.put(splitted_part[1], splitted_part[2]);
+            }
+            else if (splitted_part[0].contains("Foreign key"))
+            {
+                this.foreignKey_Hashtable.put(splitted_part[0], splitted_part[1]);
+            }
+            else {
+
+            }
+        }
+           System.out.println("Primary Key hash table **********************:" +primaryKey_Hashtable);
+           System.out.println("Foreign Key hash table **********************:" +foreignKey_Hashtable);
+        }
+        catch (Exception e){
         e.printStackTrace();
 //        System.out.println("UnknownDatabase");
     }
@@ -235,19 +255,12 @@ public class databaseStructures {
 
     public void storePermanatly(String DatabaseName)
     {
-        // inlocal = Arrays.asList(in_local);
-        // inremote = Arrays.asList(in_remote);
-
-
-
-        //System.out.println("Primary Key hashTable: " +primaryKey_Hashtable);
-        //System.out.println("Table list: " +database_list);
-
         try {
             //System.out.println(database_list);8\3.0
 
             File structurefile = new File("src/main/java/dataFiles/db/"+DatabaseName+"Structure.txt");
             File structurefile2 = new File("src/main/java/dataFiles/db/"+DatabaseName+"Data.txt");
+            File Keyfile = new File("src/main/java/dataFiles/db/"+DatabaseName+"keys.txt");
 
             String PROJECT_ID = "csci-5408-w21-305009";
             //String PATH_TO_JSON_KEY = "/path/to/json/key";
@@ -329,6 +342,7 @@ public class databaseStructures {
 
             fr.close();
 
+
             FileWriter fileWriter = new FileWriter(structurefile2,false);
             fileWriter.close();
             FileWriter fileWriter1 = new FileWriter(structurefile2,true);
@@ -403,6 +417,31 @@ public class databaseStructures {
             fileWriter1.close();
 
 
+            FileWriter fwOb = new FileWriter(Keyfile, false);
+            PrintWriter pwOb = new PrintWriter(fwOb, false);
+            pwOb.flush();
+            pwOb.close();
+            fwOb.close();
+
+            FileWriter fk = new FileWriter(Keyfile,true);
+            fk.flush();
+
+            String contentFile = "";
+            for(String key: primaryKey_Hashtable.keySet())
+            {
+                contentFile += "Primary Key For Table = " + key + " = ";
+                contentFile += primaryKey_Hashtable.get(key);
+                contentFile += "\n";
+            }
+
+            for(String key: foreignKey_Hashtable.keySet())
+            {
+                contentFile += key + " = " ;
+                contentFile += foreignKey_Hashtable.get(key);
+                contentFile += "\n";
+            }
+            fk.write(contentFile);
+            fk.close();
         }catch (Exception e){
             e.printStackTrace();
         }

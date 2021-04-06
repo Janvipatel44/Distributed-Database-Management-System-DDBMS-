@@ -1,5 +1,6 @@
 package sql.processor;
 
+import com.google.gson.internal.bind.SqlDateTypeAdapter;
 import dataFiles.db.databaseStructures;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -102,7 +103,7 @@ public class CreateProcessor implements IProcessor {
         if(query.toLowerCase().contains("primary key")) {
             for(int i = 0; i< sqlWords.length; i++) {
                 if(sqlWords[i].equalsIgnoreCase("primary")) {
-                    dbs.primaryKey_Hashtable.put("primary key "+ primaryIndex, sqlWords[i-2]);
+                    dbs.primaryKey_Hashtable.put(name, sqlWords[i-2]);
                     primaryIndex++;
                     i++;
                 }
@@ -120,14 +121,18 @@ public class CreateProcessor implements IProcessor {
                 {
                     if(foreignkeylocation==0)
                         foreignkeylocation = i;
-                    //if(dbs.table_list.contains(sqlWords[i+4]))
-                    //{
-                        String value = sqlWords[i+2] + " Reference To " + sqlWords[i+4] + "(" + sqlWords[i+5] + ")";
-                        System.out.println("value:" +value);
+                    System.out.println(sqlWords[i+5]);
+
+                    if(dbs.tableStructure.keySet().contains(sqlWords[i+4]))
+                    {
+                        String value = name + "(" + sqlWords[i+2] + ")" +" Reference To " + sqlWords[i+4] + "(" +sqlWords[i+5] + ")";
                         dbs.foreignKey_Hashtable.put("foreign key " + foreignIndex, value);
-                    //}
+                    }
+                    else {
+                        System.out.println("Can't do it");
+                    }
                     foreignIndex++;
-                    i=i+5;
+                    i=i+7;
                 }
             }
             String[] foreignKeys = Arrays.copyOfRange(sqlWords, 0, foreignkeylocation);

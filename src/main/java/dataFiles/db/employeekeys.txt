@@ -1,0 +1,10 @@
+Primary Key For Table =   wdes   =   ID
+Primary Key For Table =     we     =     ID
+Primary Key For Table =     nq     =     ID
+Primary Key For Table = wesc = ID
+Primary Key For Table =     nu     =     ID
+Primary Key For Table =     new     =     name
+Primary Key For Table =  qwsac  =  ID
+Primary Key For Table =    jwe    =    ID
+Foreign key 1  =  qwsac(ID) Reference To nu(ID)
+foreign key 1 = wesc(ID) Reference To we(ID)

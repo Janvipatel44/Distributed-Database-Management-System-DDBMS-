@@ -1,7 +1,24 @@
 databasename = employee
 
-tablename = ss = { ID : int }
-tablename = che = { name : varchar, id : int, type : varchar }
-tablename = stu = { name : varchar, id : int, age : int }
+tablename = nq = { ID : int }
+tablename = niwec = { Name : oi }
+tablename = newoi = { ID : int }
+tablename = nu = { ID : int }
 tablename = emp = { id : int, Name : String }
+tablename = nw = { Name : varchar }
+tablename = wdes = { ID : int }
+tablename = we = { ID : int }
+tablename = mi = { ID : intprimary }
+tablename = nwqw = { ID : int }
 tablename = sal = { id : int, salary : int, type : varchar }
+tablename = qwsac = { ID : int }
+tablename = ss = { ID : int }
+tablename = ww = { ID : int }
+tablename = che = { name : varchar, id : int, type : varchar }
+tablename = new = { name : varchar }
+tablename = qw = { ID : int }
+tablename = wesc = { ID : int }
+tablename = newtb = { ID : int }
+tablename = stu = { name : varchar, id : int, age : int }
+tablename = jwe = { ID : int }
+tablename = newss = { ID : int }
