@@ -1,40 +1,44 @@
 Database = employee
 
-che {
+Table : che {
 	name : varchar
 	id : int
 	type : varchar
-}
-stud {
-	name : varchar
-	id : int
-	age : int
-}
-sala {
-	id : int
-	salary : int
-	type : varchar
-}
-emp {
-	id : int
-	Name : String
-}
-students {
+} Location : Local site
+
+Table : stud {
 	name : varchar
 	id : int
 	age : int
-}
-check {
-	name : varchar
-	id : int
-	type : varchar
-}
-employee {
-	id : int
-	Name : String
-}
-salary {
+} Location : Local site
+
+Table : sala {
 	id : int
 	salary : int
 	type : varchar
-}
+} Location : Local site
+
+Table : emp {
+	id : int
+	Name : String
+} Location : Local site
+
+Table : students {
+	name : varchar
+	id : int
+	age : int
+} Location : Remote site
+Table : check {
+	name : varchar
+	id : int
+	type : varchar
+} Location : Remote site
+Table : employee {
+	id : int
+	Name : String
+} Location : Remote site
+Table : salary {
+	id : int
+	salary : int
+	type : varchar
+} Location : Remote site

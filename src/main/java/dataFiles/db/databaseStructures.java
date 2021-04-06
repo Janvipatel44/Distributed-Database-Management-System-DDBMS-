@@ -17,6 +17,8 @@ public class databaseStructures {
 
     public HashMap <String,String> primaryKey_Hashtable = new HashMap<>();
     public HashMap <String,String> foreignKey_Hashtable = new HashMap<>();
+    public String[] in_remote;
+    public String[] in_local;
 
     public String selectedDb = null;
 
@@ -25,7 +27,8 @@ public class databaseStructures {
     public HashMap<String,HashMap<String ,String>> tableStructure = new HashMap<>();
 
     public databaseStructures populateDatabaseData(String DatabaseName){
-    try {
+
+        try {
 
         File structurefile = new File("src/main/java/dataFiles/db/"+DatabaseName+"Structure.txt");
 //        System.out.println(structurefile.getPath());
@@ -35,7 +38,7 @@ public class databaseStructures {
         String PROJECT_ID = "csci-5408-w21-305009";
         //String PATH_TO_JSON_KEY = "/path/to/json/key";
         String BUCKET_NAME = "csci5408_group-project";
-        String OBJECT_NAME = "employeeStructure.txt";
+        String OBJECT_NAME = DatabaseName+"Structure.txt";
 
         StorageOptions options = null;
         options = StorageOptions.newBuilder()
@@ -46,35 +49,37 @@ public class databaseStructures {
         Blob blob = storage.get(BUCKET_NAME, OBJECT_NAME);
         String fileContent = new String(blob.getContent());
         String[] content = fileContent.split("\n");
-        System.out.println(fileContent);
+        //System.out.println(fileContent);
 
         String line ;
-        while((line=br.readLine())!=null){
+        int count_local = 0;
+        while((line=br.readLine())!=null) {
             String[] splitted_part = line.split("=");
+            if (splitted_part[0].trim().equals("tablename")) {
 
-            if(splitted_part[0].trim().equals("tablename")){
                 String tablenametemp = splitted_part[1].trim();
-                HashMap<String,String> tempcolumnHashmap = new HashMap<>();;
-//                System.out.println(tablenametemp);
-                String[] tablemetadata = splitted_part[2].replaceAll("[{}]"," ").trim().split(",");
-                for (int j= 0; j<tablemetadata.length; j++){
+                count_local++;
+                HashMap<String, String> tempcolumnHashmap = new HashMap<>();
+                //                System.out.println(tablenametemp);
+                String[] tablemetadata = splitted_part[2].replaceAll("[{}]", " ").trim().split(",");
+                for (int j = 0; j < tablemetadata.length; j++) {
                     String[] columnattributes = tablemetadata[j].trim().split(":");
 
-                    tempcolumnHashmap.put(columnattributes[0].trim(),columnattributes[1].trim());
+                    tempcolumnHashmap.put(columnattributes[0].trim(), columnattributes[1].trim());
 //                    System.out.println(columnattributes[0]+"->"+columnattributes[1]);
                 }
-                this.tableStructure.put(tablenametemp,tempcolumnHashmap);
-//                System.out.println();
-            }else if(splitted_part[0].trim().equals("databasename")){
+                this.tableStructure.put(tablenametemp, tempcolumnHashmap);
+
+            } else if (splitted_part[0].trim().equals("databasename")) {
 
             }
         }
-
+        int count_remote = 0;
         for(String line12 : content){
             String[] splitted_part = line12.split("=");
-
             if(splitted_part[0].trim().equals("tablename")){
                 String tablenametemp = splitted_part[1].trim();
+                count_remote++;
                 HashMap<String,String> tempcolumnHashmap = new HashMap<>();;
 //                System.out.println(tablenametemp);
                 String[] tablemetadata = splitted_part[2].replaceAll("[{}]"," ").trim().split(",");
@@ -90,7 +95,37 @@ public class databaseStructures {
 
             }
         }
-        System.out.println(tableStructure);
+            File tempfile = new File("src/main/java/dataFiles/db/"+DatabaseName+"Structure.txt");
+            FileReader fileReader = new FileReader(tempfile);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+        System.out.println(count_local+" "+count_remote);
+        in_remote = new String[count_remote];
+        in_local = new String[count_local];
+        int x = 0;
+        int y = 0;
+            while((line=bufferedReader.readLine())!=null) {
+                String[] splitted_part = line.split("=");
+                if (splitted_part[0].trim().equals("tablename")) {
+
+                    String tablenametemp = splitted_part[1].trim();
+                    in_local[x] = tablenametemp;
+                    x++;
+                }
+            }
+            for(String line12 : content){
+                String[] splitted_part = line12.split("=");
+                if(splitted_part[0].trim().equals("tablename")){
+                    String tablenametemp = splitted_part[1].trim();
+                    in_remote[y] = tablenametemp;
+                    y++;
+                }
+            }
+            for(int i = 0; i < in_remote.length; i++){
+                System.out.println(in_remote[i]);
+            }
+            for(int i = 0; i < in_local.length; i++){
+                System.out.println(in_local[i]);
+            }
 
         File structurefile2 = new File("src/main/java/dataFiles/db/"+DatabaseName+"Data.txt");
         FileReader fr2 = new FileReader(structurefile2);
@@ -100,7 +135,7 @@ public class databaseStructures {
         String PROJECT_ID_1 = "csci-5408-w21-305009";
         //String PATH_TO_JSON_KEY = "/path/to/json/key";
         String BUCKET_NAME_1 = "csci5408_group-project";
-        String OBJECT_NAME_1 = "employeeData.txt";
+        String OBJECT_NAME_1 = DatabaseName+"Data.txt";
 
         StorageOptions options_1 = null;
         options_1 = StorageOptions.newBuilder()
@@ -189,6 +224,7 @@ public class databaseStructures {
 //        System.out.println((tableStructure.get("employee")).get("id"));
 //        System.out.println("This is my Data Hashmap"+this.databasedata);
         return this;
+
     }
 
     public void storePermanatly(String DatabaseName)
