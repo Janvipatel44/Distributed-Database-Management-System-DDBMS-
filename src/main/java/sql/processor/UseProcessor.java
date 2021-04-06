@@ -33,11 +33,11 @@ public class UseProcessor implements IProcessor {
     }
 
     @Override
-    public databaseStructures process(InternalQuery query, String q, String username, String database,databaseStructures dbs) {
+    public databaseStructures process(InternalQuery query, String q, String username, String database,databaseStructures dbs)
+    {
         this.username = username;
         this.database = database;
         String newDatabase = (String) query.get("database");
-//        System.out.println(newDatabase);
         dbs.populateDatabaseData(newDatabase);
         if(dbs.databasedata.get(newDatabase)!=null){
             if(dbs.selectedDb == null){
@@ -47,7 +47,7 @@ public class UseProcessor implements IProcessor {
             }
             dbs.selectedDb = newDatabase;
         }
-        else{
+        else {
             System.out.println("Database doesn't exist.");
         }
         return dbs;

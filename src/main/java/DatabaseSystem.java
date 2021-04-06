@@ -10,7 +10,8 @@ public class DatabaseSystem {
     private QueryEngine queryEngine;
     public databaseStructures dbs;
 
-    public DatabaseSystem(databaseStructures dbsinject) {
+    public DatabaseSystem(databaseStructures dbsinject)
+    {
         sc = new Scanner(System.in);
 
         this.dbs = dbsinject;
@@ -18,7 +19,8 @@ public class DatabaseSystem {
         queryEngine = new QueryEngine(dbs);
     }
 
-    public String authenticate(){
+    public String authenticate()
+    {
         if(user == null){
             login login = new login();
             System.out.print("Please enter UserName:");
@@ -30,7 +32,8 @@ public class DatabaseSystem {
         return user;
     }
 
-    public databaseStructures init(databaseStructures dbsinject){
+    public databaseStructures init(databaseStructures dbsinject)
+    {
         this.dbs = dbsinject;
         while(true){
             System.out.println("Enter a SQL query to proceed or exit; to end!");

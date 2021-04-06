@@ -43,8 +43,6 @@ public class SelectProcessor implements IProcessor{
         String[] columns = (String[]) query.get("columns");
         String conditions = (String) query.get("conditions");
 
-
-
         logger.info("Identifying requested columns");
         if(columns.length ==1 && columns[0].equals("*")) {
             ArrayList<String> allcolumns = new ArrayList<>();
@@ -76,7 +74,8 @@ public class SelectProcessor implements IProcessor{
                                 if (!dbs.databasedata.get(table).get(key).get(column).equals(value)) {
                                     satisfied = true;
                                 }
-                            } else if (condition.contains("=")) {
+                            }
+                            else if (condition.contains("=")) {
                                 String[] conditionParts = condition.split("=");
                                 String column = conditionParts[0];
                                 String value = conditionParts[1].replace("'", "").replace("\"", "");

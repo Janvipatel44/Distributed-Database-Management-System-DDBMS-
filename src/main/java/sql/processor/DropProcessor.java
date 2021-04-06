@@ -30,8 +30,6 @@ public class DropProcessor implements IProcessor{
             if (key.equals(table)){
                 to_remove = key;
             }
-
-
         }
         for (String key : dbs.tableStructure.keySet())
         {
@@ -41,12 +39,13 @@ public class DropProcessor implements IProcessor{
         }
         dbs.databasedata.remove(to_remove);
         dbs.tableStructure.remove(to_remove);
-        if(to_remove.equals("")){
+        if(to_remove.equals(""))
+        {
             System.out.println("No table found");
-
         }
-        else
+        else {
             System.out.println("Deleted table");
+        }
         return dbs;
     }
 }

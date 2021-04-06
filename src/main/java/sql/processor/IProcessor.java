@@ -11,7 +11,7 @@ import javax.jws.soap.SOAPBinding.Style;
 @WebService
 @SOAPBinding(style = Style.RPC)
 
-
-public interface IProcessor {
+public interface IProcessor
+{
     @WebMethod databaseStructures process(InternalQuery internalquery, String query, String username, String database,databaseStructures dbs);
 }

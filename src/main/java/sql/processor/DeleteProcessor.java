@@ -30,11 +30,7 @@ public class DeleteProcessor implements IProcessor {
         table = table.trim();
         all_rows = dbs.databasedata.get(table);
         String conditions[] = condition.split(" ");
-        System.out.println(dbs.databasedata.get(table).keySet());
 
-        System.out.println(conditions[0]);
-        System.out.println(conditions[1]);
-        System.out.println(conditions[2]);
         String to_delete[] = new String[dbs.databasedata.get(table).size()];
         int i = 0;
         for(String key : dbs.databasedata.get(table).keySet()){

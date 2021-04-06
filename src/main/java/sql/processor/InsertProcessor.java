@@ -7,7 +7,6 @@ import dataFiles.db.databaseStructures;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
-//@WebService(endpointInterface = "sql.processor.InsertProcessor")
 
 public class InsertProcessor implements IProcessor {
     static final Logger logger = LogManager.getLogger(InsertProcessor.class.getName());
@@ -17,7 +16,8 @@ public class InsertProcessor implements IProcessor {
     private String username = null;
     private String database = null;
 
-    public static InsertProcessor instance(databaseStructures dbsinjectintomethod) {
+    public static InsertProcessor instance(databaseStructures dbsinjectintomethod)
+    {
         if (instance == null) {
             instance = new InsertProcessor();
         }
@@ -40,27 +40,24 @@ public class InsertProcessor implements IProcessor {
         this.database = database;
         String table = (String) query.get("table");
         String primaryKey = null;
-        System.out.println("Primary Key list" +dbs.primaryKey_Hashtable.keySet());
+
         if (dbs.primaryKey_Hashtable.containsKey(table)) {
             primaryKey = dbs.primaryKey_Hashtable.get(table);
-            System.out.println("Primary Key" +primaryKey);
         }
+
         ArrayList<String> uniqueItem = new ArrayList<>();
         if(dbs.databasedata.get(table) != null) {
-            for (String row : dbs.databasedata.get(table).keySet()) {
-                System.out.println(row);
-                for (String col : dbs.databasedata.get(table).get(row).keySet()) {
-                    System.out.println(col);
-                    if (col.equals(primaryKey.toLowerCase(Locale.ROOT))) {
-                        System.out.println(dbs.databasedata.get(table).get(row).get(col));
+            for (String row : dbs.databasedata.get(table).keySet())
+            {
+                for (String col : dbs.databasedata.get(table).get(row).keySet())
+                {
+                    if (col.equals(primaryKey))
+                    {
                         uniqueItem.add(dbs.databasedata.get(table).get(row).get(col));
                     }
                 }
             }
         }
-
-        System.out.println("Unique items" +uniqueItem);
-
         all_rows = dbs.databasedata.get(table);
 
         int flag = 0;
@@ -90,11 +87,8 @@ public class InsertProcessor implements IProcessor {
             if(!rowdata.isEmpty()) {
                 all_rows.put("row" + next_row_to_enter, rowdata);
             }
-            System.out.println(all_rows);
             dbs.databasedata.put(table, all_rows);
         }
-        System.out.println(dbs.databasedata);
-
         return dbs;
     }
 }
