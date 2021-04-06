@@ -58,8 +58,9 @@ public class QueryEngine {
             case "update":
                 if (checkDbSelected ()) {
                     internalQuery = UpdateParser.instance ().parse (query);
+                    UpdateProcessor updateProcessor = UpdateProcessor.instance(databaseStructures);
                     if (internalQuery != null) {
-                        this.databaseStructures = UpdateProcessor.instance ().process (internalQuery, query, username, this.database,this.databaseStructures);
+                        this.databaseStructures = updateProcessor.process(internalQuery, query, username, this.database,this.databaseStructures);
                     }
                 }
                 break;

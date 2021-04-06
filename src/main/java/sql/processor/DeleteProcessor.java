@@ -1,7 +1,5 @@
 package sql.processor;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import sql.sql.InternalQuery;
 import dataFiles.db.databaseStructures;
 
@@ -32,6 +30,7 @@ public class DeleteProcessor implements IProcessor {
         table = table.trim();
         all_rows = dbs.databasedata.get(table);
         String conditions[] = condition.split(" ");
+        System.out.println(dbs.databasedata.get(table).keySet());
 
         System.out.println(conditions[0]);
         System.out.println(conditions[1]);
@@ -48,6 +47,19 @@ public class DeleteProcessor implements IProcessor {
                 }
                 if(conditions[1].equals("!=")){
                     if(key2.equals(conditions[0]) && !dbs.databasedata.get(table).get(key).get(key2).equals(conditions[2])){
+                        to_delete[i] = key;
+                        System.out.println("deleted Entry");
+
+                    }
+                }
+                if(conditions[1].equals(">")){
+                    if(key2.equals(conditions[0]) && Integer.parseInt(dbs.databasedata.get(table).get(key).get(key2)) > Integer.parseInt(conditions[2])){
+                        to_delete[i] = key;
+                        System.out.println("deleted Entry");
+                    }
+                }
+                if(conditions[1].equals("<")){
+                    if(key2.equals(conditions[0]) && Integer.parseInt(dbs.databasedata.get(table).get(key).get(key2)) < Integer.parseInt(conditions[2])){
                         to_delete[i] = key;
                         System.out.println("deleted Entry");
 
