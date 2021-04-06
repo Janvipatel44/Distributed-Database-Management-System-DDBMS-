@@ -5,6 +5,7 @@
 import DataDictionary.DataDictionary;
 import SQLDump.SQLDump;
 import dataFiles.db.databaseStructures;
+import erdgenerator.ERDGenerator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,12 +43,13 @@ public class Main {
                     dbs.populateDatabaseData(databaseName);
                     dump.generateSQLDump (username, databaseName,dbs);
                     break;
-//                case "3":
-//                    ERDGenerator erdObj = new ERDGenerator ();
-//                    System.out.println ("Enter a database name");
-//                    String database = sc.nextLine ();
-//                    erdObj.generateERD (username, database);
-//                    break;
+               case "3":
+                    ERDGenerator erdObj = new ERDGenerator ();
+                    System.out.println ("Enter a database name");
+                    databaseName = sc.nextLine ();
+                    dbs.populateDatabaseData(databaseName);
+                    erdObj.generateERD (username, databaseName,dbs);
+                    break;
                 case "4":
                     DataDictionary dataDictionary = new DataDictionary ();
                     System.out.println ("Enter a database name");
