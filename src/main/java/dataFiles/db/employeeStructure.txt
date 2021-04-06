@@ -1,7 +1,6 @@
 databasename = employee
- 
-tablename = che = { name : varchar, id : int, type : varchar }
-tablename = stud = { name : varchar, id : int, age : int }
-tablename = sala = { id : int, salary : int, type : varchar }
-tablename = emp = { id : int, Name : String }
 
+tablename = che = { name : varchar, id : int, type : varchar }
+tablename = stu = { name : varchar, id : int, age : int }
+tablename = emp = { id : int, Name : String }
+tablename = sal = { id : int, salary : int, type : varchar }

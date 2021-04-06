@@ -3,15 +3,17 @@ package dataFiles.db;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
+import com.google.common.base.Utf8;
+import sun.nio.cs.UTF_32;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 public class databaseStructures {
 
@@ -146,7 +148,7 @@ public class databaseStructures {
         Blob blob_1 = storage_1.get(BUCKET_NAME_1, OBJECT_NAME_1);
         String fileContent_1 = new String(blob_1.getContent());
         String[] content_1 = fileContent_1.split("\n");
-        System.out.println(fileContent_1);
+        System.out.println("Helo       "+fileContent_1);
 
 
         HashMap<String,String> rowdata;
@@ -213,7 +215,7 @@ public class databaseStructures {
             database_list.add(line3);
         }
 
-        System.out.println("This is my db list"+database_list);
+        //System.out.println("This is my db list"+database_list);
 
     }catch (Exception e){
         e.printStackTrace();
@@ -229,25 +231,45 @@ public class databaseStructures {
 
     public void storePermanatly(String DatabaseName)
     {
+        List<String> inlocal = Arrays.asList(in_local);
+        List<String> inremote = Arrays.asList(in_remote);
 
-        System.out.println("Primary Key hashTable: " +primaryKey_Hashtable);
-        System.out.println("Table list: " +database_list);
+        //System.out.println("Primary Key hashTable: " +primaryKey_Hashtable);
+        //System.out.println("Table list: " +database_list);
 
         try {
-            System.out.println(database_list);
+            //System.out.println(database_list);8\3.0
+
             File structurefile = new File("src/main/java/dataFiles/db/"+DatabaseName+"Structure.txt");
             File structurefile2 = new File("src/main/java/dataFiles/db/"+DatabaseName+"Data.txt");
+
+            String PROJECT_ID = "csci-5408-w21-305009";
+            //String PATH_TO_JSON_KEY = "/path/to/json/key";
+            String BUCKET_NAME = "csci5408_group-project";
+            String OBJECT_NAME = DatabaseName+"Structure.txt";
+            String OBJECT_NAME2 = DatabaseName+"Data.txt";
+
+            StorageOptions options = null;
+            options = StorageOptions.newBuilder()
+                    .setProjectId(PROJECT_ID)
+                    .build();
+
+            Storage storage = options.getService();
+            Blob blob = storage.get(BUCKET_NAME, OBJECT_NAME);
+            Blob blob2 = storage.get(BUCKET_NAME, OBJECT_NAME2);
 
             FileWriter fw = new FileWriter(structurefile, false);
             fw.close();
             FileWriter fr = new FileWriter(structurefile,true);
 
-            String dbString = "databasename = "+DatabaseName+"\n \n";
-            System.out.println("Datatatatatat"+dbString);
+            String dbString = "databasename = "+DatabaseName+"\n\n";
+            //System.out.println("Datatatatatat"+dbString);
             fr.write(dbString);
 
-
+            String to_write = "";
+            String final_output = "";
             for(String key :  tableStructure.keySet()){
+                if(inlocal.contains(key)){
                 String tableStruct = "tablename = ";
                 String tablename = "";
 
@@ -266,41 +288,110 @@ public class databaseStructures {
                 //System.out.println(tablename);
                 tableStruct = tableStruct + tablename;
                 fr.write(tableStruct);
-                //System.out.println(tableStruct);
+                }
+                else if(inremote.contains(key)){
+                    String tableStruct = "tablename = ";
+                    String tablename = "";
+
+                    tablename = key+" = { ";
+                    String allColumns = "" ;
+                    for(String key2 : tableStructure.get(key).keySet()){
+                        //System.out.println(key2);
+                        String columnName = key2+" : "+tableStructure.get(key).get(key2)+", ";
+                        allColumns = allColumns + columnName;
+                    }
+                    StringBuffer sb = new StringBuffer(allColumns);
+                    sb.deleteCharAt(sb.length()-2);
+                    String enddelimiter = "}\n";
+                    //System.out.println(sb);
+                    tablename = tablename + sb + enddelimiter ;
+                    //System.out.println(tablename);
+                    tableStruct = tableStruct + tablename;
+                    final_output = final_output+tableStruct;
+                    //System.out.print("aaaaa     "+final_output);
+                    to_write = dbString+final_output;
+
+                }
             }
+            System.out.print("Hi"+to_write);
+
+           WritableByteChannel channel = blob.writer();
+           channel.write(ByteBuffer.wrap(to_write.getBytes(StandardCharsets.UTF_8)));
+           channel.close();
+
             fr.close();
+
             FileWriter fileWriter = new FileWriter(structurefile2,false);
             fileWriter.close();
             FileWriter fileWriter1 = new FileWriter(structurefile2,true);
-            for(String key : databasedata.keySet()){
-                String table = "";
-                table = key+" = { ";
-                String table_data = "";
-                String all_data = "";
-                for(String key2 : databasedata.get(key).keySet()){
-                    String column = "";
-                    String data = "";
-                    String final_data = "";
+            String data_to_write = "";
+            System.out.println(databasedata);
+            for(String key : databasedata.keySet()) {
+                if (inlocal.contains(key)) {
+                    String table = "";
+                    table = key + " = { ";
+                    String table_data = "";
+                    String all_data = "";
+                    for (String key2 : databasedata.get(key).keySet()) {
+                        String column = "";
+                        String data = "";
+                        String final_data = "";
 
-                    for(String key3 : databasedata.get(key).get(key2).keySet()){
-                        column = key3+" = \"";
-                        data = column+databasedata.get(key).get(key2).get(key3)+"\" , ";
-                        final_data = final_data+data;
+                        for (String key3 : databasedata.get(key).get(key2).keySet()) {
+                            column = key3 + " = \"";
+                            data = column + databasedata.get(key).get(key2).get(key3) + "\" , ";
+                            final_data = final_data + data;
 
+                        }
+                        //System.out.println(final_data);
+                        StringBuffer sb = new StringBuffer(final_data);
+                        sb.deleteCharAt(sb.length() - 2);
+                        String sb1 = sb + "";
+                        sb1 = sb1.trim();
+                        all_data = all_data + sb1 + " } , { ";
                     }
-                    //System.out.println(final_data);
-                    StringBuffer sb = new StringBuffer(final_data);
-                    sb.deleteCharAt(sb.length()-2);
-                    String sb1 = sb+"";
-                    sb1 = sb1.trim();
-                all_data = all_data+sb1+" } , { ";
+                    table_data = table + all_data;
+                    table_data = table_data.substring(0, table_data.length() - 5);
+                    System.out.println(table_data);
+                    fileWriter1.write(table_data);
+                    fileWriter1.write("\n");
                 }
-                table_data = table+all_data;
-                table_data = table_data.substring(0,table_data.length()-5);
-                System.out.println(table_data);
-                fileWriter1.write(table_data);
-                fileWriter1.write("\n");
+                else if(inremote.contains(key)){
+                    System.out.println("True");
+                    String table = "";
+                    table = key + " = { ";
+                    String table_data = "";
+                    String all_data = "";
+                    for (String key2 : databasedata.get(key).keySet()) {
+                        String column = "";
+                        String data = "";
+                        String final_data = "";
+
+                        for (String key3 : databasedata.get(key).get(key2).keySet()) {
+                            column = key3 + " = \"";
+                            data = column + databasedata.get(key).get(key2).get(key3) + "\" , ";
+                            final_data = final_data + data;
+
+                        }
+                        //System.out.println(final_data);
+                        StringBuffer sb = new StringBuffer(final_data);
+                        sb.deleteCharAt(sb.length() - 2);
+                        String sb1 = sb + "";
+                        sb1 = sb1.trim();
+                        all_data = all_data + sb1 + " } , { ";
+                    }
+                    table_data = table + all_data;
+                    table_data = table_data.substring(0, table_data.length() - 5);
+                    data_to_write = data_to_write+table_data+"\n";
+                    //System.out.println(table_data);
+
+
+                }
             }
+            //System.out.println("awfkja"+data_to_write);
+            WritableByteChannel channel2 = blob2.writer();
+            channel2.write(ByteBuffer.wrap(data_to_write.getBytes(StandardCharsets.UTF_8)));
+            channel2.close();
             fileWriter1.close();
 
 
