@@ -1,3 +1,4 @@
-che = { name = "utkarsh" , id = "1" , type = "student" } , { name = "sarthak" , id = "2" , type = "faculty" }
-emp = { name = "ram" , id = "8" }
+prodable = { name = "utkarsh" , id = "1" } , { name = "j" , id = "2" }
+emp = { name = "ram" , id = "8" } , { name = "s" , id = "1" } , { name = "janvi" , id = "2" }
+newTable = { name = "janvi" , ID = "1" } , { name = "keyusha" , ID = "2" } , { name = "jay" , ID = "1" }
 sal = { id = "1" , salary = "2000" , type = "cash" } , { id = "2" , salary = "20000" , type = "cheque" }

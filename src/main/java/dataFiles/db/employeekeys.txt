@@ -1,6 +1,8 @@
-Primary Key For Table =   sal   =   type
-Primary Key For Table =  emp    =     ID
-Primary Key For Table =     stu     =     id
-Foreign key 1  =  stu(ID) Reference To emp(ID)
-Foreign key 2  =  stu(ID) Reference To sal(ID)
-Foreign key 3  =  emp(ID) Reference To sal(ID)
+Primary Key For Table = prodable = id
+Primary Key For Table = stu = id
+Primary Key For Table = emp = id
+Primary Key For Table = newTable = ID
+Primary Key For Table = sal = type
+Foreign key 3 = emp(ID) Reference To sal(ID)
+Foreign key 1 = stu(ID) Reference To emp(ID)
+Foreign key 2 = stu(ID) Reference To sal(ID)

@@ -228,11 +228,11 @@ public class databaseStructures {
             }
             if(splitted_part[0].contains("Primary Key"))
             {
-                this.primaryKey_Hashtable.put(splitted_part[1], splitted_part[2]);
+                this.primaryKey_Hashtable.put(splitted_part[1].trim(), splitted_part[2].trim());
             }
             else if (splitted_part[0].contains("Foreign key"))
             {
-                this.foreignKey_Hashtable.put(splitted_part[0], splitted_part[1]);
+                this.foreignKey_Hashtable.put(splitted_part[0].trim(), splitted_part[1].trim());
             }
             else {
 

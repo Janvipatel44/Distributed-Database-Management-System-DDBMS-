@@ -1,6 +1,7 @@
 databasename = employee
 
-tablename = sal = { id : int, salary : int, type : varchar }
-tablename = emp = { ID : int }
+tablename = prodable = { name : varchar, id : int }
 tablename = stu = { name : varchar, id : int, age : int }
-
+tablename = emp = { ID : int }
+tablename = newTable = { name : varchar, ID : int }
+tablename = sal = { id : int, salary : int, type : varchar }
