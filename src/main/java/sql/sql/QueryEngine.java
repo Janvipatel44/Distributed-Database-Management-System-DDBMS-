@@ -54,7 +54,7 @@ public class QueryEngine {
                 }
                 end = Instant.now();
                 timeElapsed = Duration.between(start, end);
-                generalLogListener.generalLog(timeElapsed.toString(),"");
+                generalLogListener.generalLog(timeElapsed.toString(),"1");
 
                 break;
             case "insert":

@@ -24,9 +24,6 @@ public class CreateProcessor implements IProcessor {
     static final QueryListener queryListener = new QueryListener();
     private HashMap<String, String> primaryKey_Hashtable = new HashMap<String, String>();
     private HashMap<String, String> foreignKey_Hashtable = new HashMap<String, String>();
-
-    String BASE_PATH = "src/main/java/dataFiles/";
-    String DB_PATH = "src/main/java/dataFiles/databases.txt";
     static CreateProcessor instance = null;
 
     private boolean databaseExists = false;
@@ -107,7 +104,7 @@ public class CreateProcessor implements IProcessor {
                 if(sqlWords[i].equalsIgnoreCase("primary")) {
                     dbs.primaryKey_Hashtable.put(name, sqlWords[i-2]);
                     i++;
-                    logger.info("successful primaryKey generation");
+                    logger.info("Successful primaryKey generation");
                 }
             }
             List<String> list = new ArrayList<String>(Arrays.asList(sqlWords));
@@ -127,7 +124,7 @@ public class CreateProcessor implements IProcessor {
                     {
                         String value = name + "(" + sqlWords[i+2] + ")" +" Reference To " + sqlWords[i+4] + "(" +sqlWords[i+5] + ")";
                         dbs.foreignKey_Hashtable.put("foreign key " + foreignIndex, value);
-                        logger.info("ForeignKey generation successful");
+                        logger.info("Successful ForeignKey generation");
                     }
                     else {
                         logger.info("Unsuccessful foreignKey generation");

@@ -1,18 +1,21 @@
 package sql.processor;
 
+import logging.events.CrashListener;
+import logging.events.DatabaseListener;
+import logging.events.QueryListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sql.sql.InternalQuery;
 import dataFiles.db.databaseStructures;
-
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 
-public class InsertProcessor implements IProcessor {
+public class InsertProcessor implements IProcessor
+{
     static final Logger logger = LogManager.getLogger(InsertProcessor.class.getName());
-
+    static final CrashListener crashListener = new CrashListener();
+    static final DatabaseListener databaseListener = new DatabaseListener();
+    static final QueryListener queryListener = new QueryListener();
     static InsertProcessor instance = null;
 
     private String username = null;
@@ -36,6 +39,7 @@ public class InsertProcessor implements IProcessor {
 
     @Override
     public databaseStructures process(InternalQuery query, String q, String username, String database, databaseStructures dbs) {
+        queryListener.recordEvent();
         first_entry = new HashMap<>();
         rowdata = new HashMap<>();
         this.username = username;
@@ -48,7 +52,7 @@ public class InsertProcessor implements IProcessor {
         String[] columns = (String[]) query.get("columns");
         String[] values = (String[]) query.get("values");
         int temp = 0;
-        //Foreign key 3 = emp(id) Reference To sal(id)
+
         if (dbs.foreignKey_Hashtable.keySet() != null)
         {
             for(String key : dbs.foreignKey_Hashtable.keySet())
@@ -72,14 +76,10 @@ public class InsertProcessor implements IProcessor {
                                         temp = 1;
                                     }
                                 }
-                            }
-                        }
+                            }}
                     }
-                }
-            }
+                }}
         }
-
-
 
         if (dbs.primaryKey_Hashtable.containsKey(table)) {
             primaryKey = dbs.primaryKey_Hashtable.get(table);
@@ -108,20 +108,23 @@ public class InsertProcessor implements IProcessor {
         for (int i = 0; i < columns.length; i++) {
             if (columns[i].equals(primaryKey) && uniqueItem.contains(values[i])) {
                 rowdata.clear();
-                System.out.println("Can't insert due to primary key contraints");
+                crashListener.recordEvent();
+                logger.info("Can't insert due to primary key constraints");
                 break;
             }
             if(temp==1) {
                 rowdata.put(columns[i], values[i]);
             }
             else{
-                System.out.println("foreign key contraints failed");
+                crashListener.recordEvent();
+                logger.info("foreign key constraints failed");
             }
         }
 
         int hashmap_size = 0;
         if (flag == 1) {
             first_entry.put("row1", rowdata);
+            databaseListener.recordEvent();
             dbs.databasedata.put(table, first_entry);
         } else {
             hashmap_size = all_rows.size();
@@ -129,6 +132,7 @@ public class InsertProcessor implements IProcessor {
             if(!rowdata.isEmpty()) {
                 all_rows.put("row" + next_row_to_enter, rowdata);
             }
+            databaseListener.recordEvent();
             dbs.databasedata.put(table, all_rows);
         }
         return dbs;

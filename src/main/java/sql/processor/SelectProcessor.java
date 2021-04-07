@@ -2,26 +2,20 @@ package sql.processor;
 
 import dataFiles.db.databaseStructures;
 import logging.events.CrashListener;
+import logging.events.DatabaseListener;
 import logging.events.QueryListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sql.parser.SelectParser;
 import sql.sql.InternalQuery;
-
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class SelectProcessor implements IProcessor{
-
-    static final Logger logger = LogManager.getLogger(SelectProcessor.class.getName());
+public class SelectProcessor implements IProcessor
+{
+    static final Logger logger = LogManager.getLogger(InsertProcessor.class.getName());
     static final CrashListener crashListener = new CrashListener();
+    static final DatabaseListener databaseListener = new DatabaseListener();
     static final QueryListener queryListener = new QueryListener();
-    String BASE_PATH = "src/main/java/dataFiles/";
-    String DB_PATH = "src/main/java/dataFiles/databases.json";
+
     static SelectProcessor instance = null;
 
     private String username = null;
@@ -39,6 +33,7 @@ public class SelectProcessor implements IProcessor{
         this.username = username;
         this.database = database;
 
+        queryListener.recordEvent();
         String table = (String) query.get("table");
         String[] columns = (String[]) query.get("columns");
         String conditions = (String) query.get("conditions");
@@ -104,8 +99,12 @@ public class SelectProcessor implements IProcessor{
                     }
                 }
                 if(row_Values.equals("")){
+                    crashListener.recordEvent();
+                    logger.info("Unsuccessful performance of select statement");
                     continue;
                 }else{
+                    databaseListener.recordEvent();
+                    logger.info("Successfully performance the select statement");
                     System.out.println(row_Values+"|");
                 }
             }

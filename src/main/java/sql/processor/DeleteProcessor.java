@@ -41,6 +41,7 @@ public class DeleteProcessor implements IProcessor {
 
         if(!dbs.database_list.contains(table)) {
             crashListener.recordEvent();
+            logger.info("Table does not exist");
         }
 
         this.database = database;
@@ -51,58 +52,67 @@ public class DeleteProcessor implements IProcessor {
 
         String to_delete[] = new String[dbs.databasedata.get(table).size()];
         int i = 0;
+        int successCount = 0;
         for(String key : dbs.databasedata.get(table).keySet()){
             for(String key2 : dbs.databasedata.get(table).get(key).keySet()){
                 if(conditions[1].equals("=")){
                    if(key2.equals(conditions[0]) && dbs.databasedata.get(table).get(key).get(key2).equals(conditions[2])){
                        to_delete[i] = key;
                        databaseListener.recordEvent();
-                       logger.info("deleted Entry");
+                       logger.info("Successful deleted entry");
+                       successCount++;
                    }
                 }
                 if(conditions[1].equals("!=")){
                     if(key2.equals(conditions[0]) && !dbs.databasedata.get(table).get(key).get(key2).equals(conditions[2])){
                         to_delete[i] = key;
                         databaseListener.recordEvent();
-                        logger.info("deleted Entry");
+                        logger.info("Successful deleted entry");
+                        successCount++;
                     }
                 }
                 if(conditions[1].equals(">")){
                     if(key2.equals(conditions[0]) && Integer.parseInt(dbs.databasedata.get(table).get(key).get(key2)) > Integer.parseInt(conditions[2])){
                         to_delete[i] = key;
                         databaseListener.recordEvent();
-                        logger.info("deleted Entry");
+                        logger.info("Successful deleted entry");
+                        successCount++;
                     }
                 }
                 if(conditions[1].equals("<")){
                     if(key2.equals(conditions[0]) && Integer.parseInt(dbs.databasedata.get(table).get(key).get(key2)) < Integer.parseInt(conditions[2])){
                         to_delete[i] = key;
                         databaseListener.recordEvent();
-                        logger.info("deleted Entry");
+                        logger.info("Successful deleted entry");
+                        successCount++;
                     }
                 }
                 if(conditions[1].equals(">=")){
                     if(key2.equals(conditions[0]) && Integer.parseInt(dbs.databasedata.get(table).get(key).get(key2)) >= Integer.parseInt(conditions[2])){
                         to_delete[i] = key;
                         databaseListener.recordEvent();
-                        logger.info("deleted Entry");
+                        logger.info("Successful deleted entry");
+                        successCount++;
                     }
                 }
                 if(conditions[1].equals("<=")){
                     if(key2.equals(conditions[0]) && Integer.parseInt(dbs.databasedata.get(table).get(key).get(key2)) <= Integer.parseInt(conditions[2])){
                         to_delete[i] = key;
                         databaseListener.recordEvent();
-                        logger.info("deleted Entry");
+                        logger.info("Successful deleted entry");
+                        successCount++;
                     }
                 }
             }
             i = i + 1;
         }
+        if(successCount == 0){
+            crashListener.recordEvent();
+            logger.info("Unsuccessful deletion operation");
+        }
         for(int j = 0; j < to_delete.length; j++) {
             dbs.databasedata.get(table).remove(to_delete[j]);
         }
         return dbs;
-
     }
-
 }
