@@ -64,32 +64,18 @@ public class InsertProcessor implements IProcessor {
                 if(foreignKeytable[0].equals(table))
                 {
                     for(String row : dbs.databasedata.get(foreignKeyReferencetable[0]).keySet()) {
-                        System.out.println("row" +row);
-
                         for(String col : dbs.databasedata.get(foreignKeyReferencetable[0]).get(row).keySet())
                         {
-                            System.out.println("col" +col);
-
                             if(col.equals(foreignKeyReferencetable[1])) {
-
                                 for(int i=0; i<values.length;i++) {
-                                    System.out.println("columns:" +columns[i]);
-                                    System.out.println("value" +values[i]);
-
                                     if (dbs.databasedata.get(foreignKeyReferencetable[0]).get(row).get(col).equals(values[i])) {
-                                        System.out.println("Here");
-
                                         temp = 1;
                                     }
-
                                 }
                             }
-
                         }
                     }
                 }
-                System.out.println("FLLLLLLLLLLLLLLAGGGGGGGGGGGGGG" +temp);
-
             }
         }
 
@@ -118,7 +104,6 @@ public class InsertProcessor implements IProcessor {
         if (all_rows == null) {
             flag = 1;
         }
-        System.out.println(all_rows);
 
         for (int i = 0; i < columns.length; i++) {
             if (columns[i].equals(primaryKey) && uniqueItem.contains(values[i])) {
@@ -134,7 +119,6 @@ public class InsertProcessor implements IProcessor {
             }
         }
 
-        System.out.println(rowdata);
         int hashmap_size = 0;
         if (flag == 1) {
             first_entry.put("row1", rowdata);

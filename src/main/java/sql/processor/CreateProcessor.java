@@ -42,7 +42,7 @@ public class CreateProcessor implements IProcessor {
 
     private databaseStructures createDB(InternalQuery internalQuery, String query, String username, String database, databaseStructures dbs)  {
         String name = (String) internalQuery.get("name");
-        System.out.println(name);
+
         if(!dbs.database_list.contains(name)) {
             dbs.database_list.add(name);
             try{
@@ -69,10 +69,9 @@ public class CreateProcessor implements IProcessor {
     {
         HashMap<String,String> datatable = new HashMap<String,String>(); // Create an ArrayList object
         String name = (String) internalQuery.get("name");
-        System.out.println(name);
 
         String location = (String) internalQuery.get("location");
-        System.out.println();
+
         if(location.equals("local")){
             dbs.inlocal.add(name);
         }
@@ -137,7 +136,6 @@ public class CreateProcessor implements IProcessor {
 
         logger.info("Adding indexes to table!");
         String tableName = (String) internalQuery.get("name");
-        System.out.println("\n" +tableName);
 
         if(datatable!=null) {
             dbs.tableStructure.put(tableName, datatable);

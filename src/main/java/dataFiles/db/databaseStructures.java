@@ -4,7 +4,6 @@ import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import com.google.common.base.Utf8;
-import sun.nio.cs.UTF_32;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -204,7 +203,6 @@ public class databaseStructures {
         while((line=bufferedReader.readLine())!=null) {
             String[] splitted_part = line.split("=");
             for (String s: splitted_part){
-                System.out.println("\n " +s);
             }
             if(splitted_part[0].contains("Primary Key"))
             {
@@ -256,7 +254,6 @@ public class databaseStructures {
 
             String to_write = "";
             String final_output = "";
-            System.out.println("INNNNNNNNNNNN" +inlocal);
             for(String key :  tableStructure.keySet()){
 
                 if(inlocal.contains(key)){
@@ -308,7 +305,6 @@ public class databaseStructures {
             fileWriter.close();
             FileWriter fileWriter1 = new FileWriter(structurefile2,true);
             String data_to_write = "";
-            System.out.println(databasedata);
             for(String key : databasedata.keySet()) {
                 if (inlocal.contains(key)) {
                     String table = "";
@@ -334,12 +330,10 @@ public class databaseStructures {
                     }
                     table_data = table + all_data;
                     table_data = table_data.substring(0, table_data.length() - 5);
-                    System.out.println(table_data);
                     fileWriter1.write(table_data);
                     fileWriter1.write("\n");
                 }
                 else if(inremote.contains(key)){
-                    System.out.println("True");
                     String table = "";
                     table = key + " = { ";
                     String table_data = "";

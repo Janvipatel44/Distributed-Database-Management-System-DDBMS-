@@ -39,17 +39,12 @@ public class UseProcessor implements IProcessor {
         this.database = database;
         String newDatabase = (String) query.get("database");
         dbs.populateDatabaseData(newDatabase);
-        if(dbs.databasedata.get(newDatabase)!=null){
             if(dbs.selectedDb == null){
                 System.out.println("Selecting database '"+ newDatabase+"'");
             }else{
                 System.out.println("Changing database from '"+ dbs.selectedDb +"' to '"+ newDatabase+"'" );
             }
             dbs.selectedDb = newDatabase;
-        }
-        else {
-            System.out.println("Database doesn't exist.");
-        }
         return dbs;
     }
 }
