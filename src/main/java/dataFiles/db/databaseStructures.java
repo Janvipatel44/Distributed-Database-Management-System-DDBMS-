@@ -10,8 +10,10 @@ import java.nio.channels.WritableByteChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class databaseStructures {
-
+public class databaseStructures
+{
+    public HashMap<String,HashMap<String,HashMap<String,String>>> databasedata = new HashMap<>();
+    public HashMap<String,HashMap<String ,String>> tableStructure = new HashMap<>();
     public HashMap <String,String> primaryKey_Hashtable = new HashMap<>();
     public HashMap <String,String> foreignKey_Hashtable = new HashMap<>();
     public String[] in_remote;
@@ -21,9 +23,6 @@ public class databaseStructures {
     public String selectedDb = null;
 
     public ArrayList<String> database_list = new ArrayList<String>();
-    public HashMap<String,HashMap<String,HashMap<String,String>>> databasedata = new HashMap<>();
-    public HashMap<String,HashMap<String ,String>> tableStructure = new HashMap<>();
-
     public databaseStructures populateDatabaseData(String DatabaseName){
 
         try {
