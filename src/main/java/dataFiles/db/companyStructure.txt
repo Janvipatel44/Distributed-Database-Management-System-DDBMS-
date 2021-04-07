@@ -2,4 +2,3 @@ databasename = company
 
 tablename = designation = { post : varchar, employeeid : int }
 tablename = employee = { departmentid : int, name : varchar, employeeid : int, email : varchar, age : int }
-tablename = salary = { amount : int, employeeid : int }
