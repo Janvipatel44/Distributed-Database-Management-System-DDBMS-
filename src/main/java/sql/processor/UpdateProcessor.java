@@ -116,6 +116,7 @@ public class UpdateProcessor implements IProcessor
         }
         end = Instant.now();
         timeElapsed = Duration.between(start, end);
+
         generalLogListener.generalLog(timeElapsed.toString(),numberOfrowsVisited.toString());
         return dbs;
     }

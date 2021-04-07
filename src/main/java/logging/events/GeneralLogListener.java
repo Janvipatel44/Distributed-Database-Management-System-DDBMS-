@@ -13,6 +13,6 @@ public class GeneralLogListener implements IEventListener
     }
 
     public void generalLog(String time, String record) {
-        logger.info("Time taken for query : " +time +"\n" +"No of records effected:" +record);
+        logger.info("Time taken for query : " +time +"\n" +"records checked:" +record);
     }
 }
