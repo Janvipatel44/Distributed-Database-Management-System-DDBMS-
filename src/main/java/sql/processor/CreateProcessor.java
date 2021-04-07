@@ -40,8 +40,11 @@ public class CreateProcessor implements IProcessor {
         return instance;
     }
 
-    private databaseStructures createDB(InternalQuery internalQuery, String query, String username, String database, databaseStructures dbs)  {
+    private databaseStructures createDB(InternalQuery internalQuery, String query, String username, String database, databaseStructures dbs)
+    {
+        queryListener.recordEvent();
         String name = (String) internalQuery.get("name");
+        logger.info("Checking if database exists!");
 
         if(!dbs.database_list.contains(name)) {
             dbs.database_list.add(name);
@@ -53,13 +56,16 @@ public class CreateProcessor implements IProcessor {
             }
             catch(Exception e){
                 e.printStackTrace();
+                crashListener.recordEvent();
             }
 
             logger.info("DB "+name+" created successfully!");
+
             databaseListener.recordEvent();
         }
         else{
             logger.info("Sorry couldn’t create DB");
+            logger.info("Duplicate database found!");
             crashListener.recordEvent();
         }
         return dbs;
@@ -68,16 +74,20 @@ public class CreateProcessor implements IProcessor {
     private databaseStructures createTable(InternalQuery internalQuery, String query, String username, String database, databaseStructures dbs)
     {
         HashMap<String,String> datatable = new HashMap<String,String>(); // Create an ArrayList object
+        queryListener.recordEvent();
+
         String name = (String) internalQuery.get("name");
 
         String location = (String) internalQuery.get("location");
 
         if(location.equals("local")){
             dbs.inlocal.add(name);
+            logger.info("Generating data on local machine");
         }
 
         else if(location.contains("remote")){
             dbs.inremote.add(name);
+            logger.info("Generating data on remote machine");
         }
 
         query = query.replaceAll(";", "");
@@ -88,16 +98,16 @@ public class CreateProcessor implements IProcessor {
 
         String[] sqlWords = query.split(" ");
 
-        int primaryIndex = 1;
         int foreignIndex = 1;
         int foreignkeylocation = 0;
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         if(query.toLowerCase().contains("primary key")) {
-            for(int i = 0; i< sqlWords.length; i++) {
+            for(int i = 0; i< sqlWords.length; i++)
+            {
                 if(sqlWords[i].equalsIgnoreCase("primary")) {
                     dbs.primaryKey_Hashtable.put(name, sqlWords[i-2]);
-                    primaryIndex++;
                     i++;
+                    logger.info("successful primaryKey generation");
                 }
             }
             List<String> list = new ArrayList<String>(Arrays.asList(sqlWords));
@@ -117,9 +127,10 @@ public class CreateProcessor implements IProcessor {
                     {
                         String value = name + "(" + sqlWords[i+2] + ")" +" Reference To " + sqlWords[i+4] + "(" +sqlWords[i+5] + ")";
                         dbs.foreignKey_Hashtable.put("foreign key " + foreignIndex, value);
+                        logger.info("ForeignKey generation successful");
                     }
                     else {
-                        System.out.println("Can't do it");
+                        logger.info("Unsuccessful foreignKey generation");
                     }
                     foreignIndex++;
                     i=i+7;
@@ -137,8 +148,14 @@ public class CreateProcessor implements IProcessor {
         logger.info("Adding indexes to table!");
         String tableName = (String) internalQuery.get("name");
 
-        if(datatable!=null) {
+        if(datatable!=null)
+        {
             dbs.tableStructure.put(tableName, datatable);
+            databaseListener.recordEvent();
+            logger.info("Successful creation of data table");
+        }
+        else{
+            logger.info("Unsuccessful creation of data table");
         }
         return dbs;
     }
@@ -147,7 +164,6 @@ public class CreateProcessor implements IProcessor {
 
         this.username = username;
         this.database = database;
-        logger.info("Checking if database exists!");
 
         if(internalQuery.get("type").equals("database"))
         {

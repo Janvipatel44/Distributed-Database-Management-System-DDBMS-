@@ -21,25 +21,6 @@ public class InternalQuery {
             this.tableName = tableName;
         }
 
-        public String getAction() {
-            return action;
-        }
-
-        public void setAction(String action) {
-            this.action = action;
-        }
-
-        public String getSubject() {
-            return subject;
-        }
-
-        public void setSubject(String subject) {
-            if (subject == null) {
-                subject = "";
-            }
-            this.subject = subject;
-        }
-
         public String getOption() {
             return option;
         }
