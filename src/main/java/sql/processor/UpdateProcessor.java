@@ -48,6 +48,7 @@ public class UpdateProcessor implements IProcessor
 
         String conditions[] = condition.split(" ");
         String options[] = option.split(" ");
+
         name = name.trim();
         logger.info("Identifying requested columns");
         int successfulcount = 0;
@@ -60,7 +61,8 @@ public class UpdateProcessor implements IProcessor
                 numberOfrowsVisited++;
                 if(conditions[1].equals("=")){
                     if(key2.equals(conditions[0]) && dbs.databasedata.get(name).get(key).get(key2).equals(conditions[2])){
-                        dbs.databasedata.get(name).get(key).put(key2, options[2]);
+                        System.out.println("update:" +conditions[0]);
+                        dbs.databasedata.get(name).get(key).put(options[0], options[2]);
                         databaseListener.recordEvent();
                         logger.info("updated entry successfully");
                         successfulcount++;
@@ -68,7 +70,7 @@ public class UpdateProcessor implements IProcessor
                 }
                 else if(conditions[1].equals(">")){
                     if(key2.equals(conditions[0]) && Integer.parseInt(dbs.databasedata.get(name).get(key).get(key2)) > Integer.parseInt(conditions[2])){
-                        dbs.databasedata.get(name).get(key).put(key2, options[2]);
+                        dbs.databasedata.get(name).get(key).put(options[0], options[2]);
                         databaseListener.recordEvent();
                         logger.info("updated entry successfully");
                         successfulcount++;
@@ -76,7 +78,7 @@ public class UpdateProcessor implements IProcessor
                 }
                 else if(conditions[1].equals("<")){
                     if(key2.equals(conditions[0]) && Integer.parseInt(dbs.databasedata.get(name).get(key).get(key2)) < Integer.parseInt(conditions[2])){
-                        dbs.databasedata.get(name).get(key).put(key2, options[2]);
+                        dbs.databasedata.get(name).get(key).put(options[0], options[2]);
                         databaseListener.recordEvent();
                         logger.info("updated entry successfully");
                         successfulcount++;
@@ -84,7 +86,7 @@ public class UpdateProcessor implements IProcessor
                 }
                 else if(conditions[1].equals("!=")){
                     if(key2.equals(conditions[0]) && !dbs.databasedata.get(name).get(key).get(key2).equals(conditions[2])){
-                        dbs.databasedata.get(name).get(key).put(key2, options[2]);
+                        dbs.databasedata.get(name).get(key).put(options[0], options[2]);
                         databaseListener.recordEvent();
                         logger.info("updated entry successfully");
                         successfulcount++;
@@ -92,7 +94,7 @@ public class UpdateProcessor implements IProcessor
                 }
                 else if(conditions[1].equals(">=")){
                     if(key2.equals(conditions[0]) && Integer.parseInt(dbs.databasedata.get(name).get(key).get(key2)) >= Integer.parseInt(conditions[2])){
-                        dbs.databasedata.get(name).get(key).put(key2, options[2]);
+                        dbs.databasedata.get(name).get(key).put(options[0], options[2]);
                         databaseListener.recordEvent();
                         logger.info("updated entry successfully");
                         successfulcount++;
@@ -100,7 +102,7 @@ public class UpdateProcessor implements IProcessor
                 }
                 else if(conditions[1].equals("<=")){
                     if(key2.equals(conditions[0]) && Integer.parseInt(dbs.databasedata.get(name).get(key).get(key2)) <= Integer.parseInt(conditions[2])){
-                        dbs.databasedata.get(name).get(key).put(key2, options[2]);
+                        dbs.databasedata.get(name).get(key).put(options[0], options[2]);
                         databaseListener.recordEvent();
                         logger.info("updated entry successfully");
                         successfulcount++;
