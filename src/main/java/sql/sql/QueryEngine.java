@@ -22,7 +22,9 @@ public class QueryEngine {
         this.databaseStructures =dbs;
     }
 
-    public databaseStructures run(String query, String username,databaseStructures dbs) {
+    public databaseStructures run(String query, String username,databaseStructures dbs)
+    {
+
         this.databaseStructures = dbs;
         InternalQuery internalQuery = null;
         String action = query.replaceAll (" .*", "");
@@ -103,21 +105,18 @@ public class QueryEngine {
                     this.databaseStructures = dropProcessor.process(internalQuery, query, username, database, this.databaseStructures);
                     this.database = dropProcessor.getDatabase();
                 }
+
                 end = Instant.now();
                 timeElapsed = Duration.between(start, end);
                 generalLogListener.generalLog(timeElapsed.toString(),"1");
 
                 break;
             case "select":
-                start = Instant.now();
 
                 if (checkDbSelected ()) {
                     internalQuery = SelectParser.instance ().parse (query);
                     this.databaseStructures = SelectProcessor.instance ().process (internalQuery,query,username, database,this.databaseStructures);
                 }
-                end = Instant.now();
-                timeElapsed = Duration.between(start, end);
-                generalLogListener.generalLog(timeElapsed.toString(),"");
 
                 break;
             default:

@@ -16,8 +16,7 @@ import java.nio.file.Paths;
 public class UseProcessor implements IProcessor {
     static final Logger logger = LogManager.getLogger(UseProcessor.class.getName());
     static final QueryListener queryListener = new QueryListener();
-    static final DatabaseListener databaseListener = new DatabaseListener();
-    static final CrashListener crashListener = new CrashListener();
+
 
     static UseProcessor instance = null;
 

@@ -3,30 +3,26 @@ package dataFiles.db;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
-import com.google.common.base.Utf8;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.*;
 
-public class databaseStructures {
-
+public class databaseStructures
+{
+    public HashMap<String,HashMap<String,HashMap<String,String>>> databasedata = new HashMap<>();
+    public HashMap<String,HashMap<String ,String>> tableStructure = new HashMap<>();
     public HashMap <String,String> primaryKey_Hashtable = new HashMap<>();
     public HashMap <String,String> foreignKey_Hashtable = new HashMap<>();
     public String[] in_remote;
     public String[] in_local;
     public List<String> inlocal = new ArrayList<>();
     public List<String> inremote = new ArrayList<>();
-
     public String selectedDb = null;
 
     public ArrayList<String> database_list = new ArrayList<String>();
-    public HashMap<String,HashMap<String,HashMap<String,String>>> databasedata = new HashMap<>();
-    public HashMap<String,HashMap<String ,String>> tableStructure = new HashMap<>();
-
     public databaseStructures populateDatabaseData(String DatabaseName){
 
         try {
