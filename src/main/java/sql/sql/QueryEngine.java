@@ -38,7 +38,7 @@ public class QueryEngine {
                 this.database = useProcessor.getDatabase ();
                 end = Instant.now();
                 timeElapsed = Duration.between(start, end);
-                generalLogListener.generalLog(timeElapsed.toString(),"");
+                generalLogListener.generalLog(timeElapsed.toString(),"1");
                 break;
 
             case "create":
@@ -68,24 +68,20 @@ public class QueryEngine {
                 }
                 end = Instant.now();
                 timeElapsed = Duration.between(start, end);
-                generalLogListener.generalLog(timeElapsed.toString(),"");
+                generalLogListener.generalLog(timeElapsed.toString(),"1");
 
                 break;
             case "delete":
-                start = Instant.now();
                 if (checkDbSelected ()) {
                     internalQuery = DeleteParser.instance ().parse (query);
                     DeleteProcessor deleteProcessor = DeleteProcessor.instance(databaseStructures);
                     this.databaseStructures = deleteProcessor.process(internalQuery, query, username, database, this.databaseStructures);
                     this.database = deleteProcessor.getDatabase();
                 }
-                end = Instant.now();
-                timeElapsed = Duration.between(start, end);
-                generalLogListener.generalLog(timeElapsed.toString(),"");
+
                 break;
 
             case "update":
-                start = Instant.now();
 
                 if (checkDbSelected ()) {
                     internalQuery = UpdateParser.instance ().parse (query);
@@ -94,9 +90,7 @@ public class QueryEngine {
                         this.databaseStructures = updateProcessor.process(internalQuery, query, username, this.database,this.databaseStructures);
                     }
                 }
-                end = Instant.now();
-                timeElapsed = Duration.between(start, end);
-                generalLogListener.generalLog(timeElapsed.toString(),"");
+
                 break;
 
             case "drop":
@@ -111,7 +105,7 @@ public class QueryEngine {
                 }
                 end = Instant.now();
                 timeElapsed = Duration.between(start, end);
-                generalLogListener.generalLog(timeElapsed.toString(),"");
+                generalLogListener.generalLog(timeElapsed.toString(),"1");
 
                 break;
             case "select":

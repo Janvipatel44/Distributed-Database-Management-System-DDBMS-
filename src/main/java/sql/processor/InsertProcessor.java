@@ -108,7 +108,6 @@ public class InsertProcessor implements IProcessor
         for (int i = 0; i < columns.length; i++) {
             if (columns[i].equals(primaryKey) && uniqueItem.contains(values[i])) {
                 rowdata.clear();
-                crashListener.recordEvent();
                 logger.info("Can't insert due to primary key constraints");
                 break;
             }
